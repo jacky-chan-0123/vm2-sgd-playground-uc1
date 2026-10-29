@@ -260,7 +260,7 @@
     </section>
 
     <section class="section" id="recommendations">
-      <div class="section-heading"><div><div class="eyebrow">Conditional review</div><h2>Scenario actions</h2></div><p>Named matches only.</p></div>
+      <div class="section-heading"><div><div class="eyebrow">Offer guidance</div><h2>Suggested for you</h2></div><p>Named matches only.</p></div>
       <div class="lower-grid">
         <article class="recommendations" id="recommendationList"></article>
         <aside class="no-match"><div class="eyebrow">Uncertainty state</div><h2>No confirmed match</h2><p>These named merchants or categories have no verified match in this snapshot.</p><ul id="noMatchList"></ul></aside>
@@ -312,6 +312,11 @@
       const neutralCopy = value => String(value ?? '')
         .replace(new RegExp(`${providerToken} Red Credit Card`, 'gi'), 'the required card shown in the source')
         .replace(new RegExp(providerToken, 'gi'), 'the offer provider');
+      const conciseWhy = value => neutralCopy(value || 'Matches a public offer in the daily register.')
+        .replace(/^The (?:mock|illustrative|training) pattern includes[^,]+,\s*and\s*/i, '')
+        .replace(/^The (?:mock|illustrative|training) pattern includes[^.]*\.\s*/i, '')
+        .replace(/^The scenario includes[^.]*\.\s*/i, '')
+        .trim();
       const sourceLink = text => {
         const url = String(text || '').match(/https?:\/\/[^\s)]+/);
         return url ? `<a href="${escapeHTML(url[0])}" target="_blank" rel="noreferrer" aria-label="View public source in a new tab">View public source ↗</a>` : '<span class="meta">Source retained in daily audit</span>';
@@ -363,7 +368,7 @@
       }
       function renderRecommendations() {
         const items = data.recommendations || [];
-        document.getElementById('recommendationList').innerHTML = `<div class="eyebrow">If the scenario repeats</div><h2>Conditional actions</h2>${items.map(item => `<div class="recommendation"><h3>${escapeHTML(neutralCopy(item.merchant))}</h3><p><b>Why:</b> ${escapeHTML(neutralCopy(item.why || 'Matches a public offer in the daily register.'))}</p><p><b>Do:</b> ${escapeHTML(neutralCopy(item.action || 'Check the source before payment.'))}</p><p><b>Check:</b> ${escapeHTML(neutralCopy(item.check || 'Confirm live terms and eligibility.'))}</p>${sourceLink(item.source)}</div>`).join('')}`;
+        document.getElementById('recommendationList').innerHTML = items.map(item => `<div class="recommendation"><h3>${escapeHTML(neutralCopy(item.merchant))}</h3><p>${escapeHTML(conciseWhy(item.why))}</p><p><b>Do:</b> ${escapeHTML(neutralCopy(item.action || 'Check the source before payment.'))}</p>${sourceLink(item.source)}</div>`).join('');
         document.getElementById('noMatchList').innerHTML = (data.noMatch && data.noMatch.length ? data.noMatch : ['No unverified matches are shown.']).map(item => `<li>${escapeHTML(neutralCopy(item))}</li>`).join('');
       }
       function renderTransactions() {
