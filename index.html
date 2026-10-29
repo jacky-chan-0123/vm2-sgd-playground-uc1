@@ -70,6 +70,7 @@
     .primary:hover { border-color: var(--red-dark); background: var(--red-dark); }
     .secondary { border: 1px solid var(--charcoal); background: var(--white); color: var(--ink); }
     .secondary:hover { border-color: var(--red); color: var(--red-dark); }
+    .summary-actions { display: flex; flex: 0 0 auto; flex-wrap: wrap; justify-content: flex-end; gap: 9px; }
     .summary .primary { flex: 0 0 auto; white-space: nowrap; }
 
     .side-title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
@@ -189,7 +190,8 @@
       .training-banner { margin: 12px 0 18px; }
       .summary { padding: 21px 18px 18px; }
       .summary-head { display: block; }
-      .summary .primary { margin-top: 15px; }
+      .summary-actions { justify-content: flex-start; margin-top: 15px; }
+      .summary .primary { margin-top: 0; }
       .summary-copy { font-size: 13px; }
       .stat { min-width: 0; padding-right: 8px; margin-right: 8px; }
       .summary-side { padding: 18px; }
@@ -235,7 +237,7 @@
             <h1>Daily offer monitor</h1>
             <p class="summary-copy">Illustrative spend with source-linked public offers. Confirm terms before payment.</p>
           </div>
-          <button class="primary" id="openCharge">Add charge</button>
+          <div class="summary-actions"><button class="primary" id="openCharge">Add charge</button><button class="primary" id="openStatement">Upload new statement record</button></div>
         </div>
         <div class="summary-amount" id="totalSpend">— <span>training period spend</span></div>
         <div class="summary-stats" aria-label="Training spending summary">
@@ -295,6 +297,17 @@
       <div class="dialog-footer"><button type="button" class="secondary" id="closeCharge">Cancel</button><button class="primary" type="submit">Add local preview</button></div>
     </form>
   </div>
+  <div class="modal" id="statementModal" hidden role="dialog" aria-modal="true" aria-labelledby="statementTitle">
+    <form class="dialog" id="statementForm">
+      <div class="eyebrow">Local mock statement</div><h2 id="statementTitle">Upload mock statement</h2>
+      <p class="meta">CSV or JSON only. Read and analysed in this browser session; nothing is uploaded or sent anywhere.</p>
+      <div class="warning"><strong>Use approved illustrative records only. Do not select a real statement, statement image, account number, card number, payment data or personal information.</strong></div>
+      <label class="field full"><span>Mock statement file</span><input id="statementFile" name="statementFile" type="file" accept=".csv,text/csv,.json,application/json" required></label>
+      <p class="meta">Required fields: date, merchant, category, location and amount. Optional: card. Categories: Restaurant, Travel, Shopping, Groceries, Clothing or Utilities.</p>
+      <label class="check"><input type="checkbox" name="confirm" required><span>I confirm this is an approved illustrative CSV or JSON file with no real or personal data.</span></label>
+      <div class="dialog-footer"><button type="button" class="secondary" id="closeStatement">Cancel</button><button class="primary" type="submit">Analyse locally</button></div>
+    </form>
+  </div>
   <div class="toast" id="toast" hidden role="status"></div>
 
   <script src="data.js"></script>
@@ -327,6 +340,18 @@
       let lastFocus = null;
       try { extras = JSON.parse(sessionStorage.getItem('r-offers-training-extras') || '[]'); } catch (error) { extras = []; }
       const allTx = () => [...data.transactions, ...extras];
+      const merchantKey = value => neutralCopy(value).toLowerCase()
+        .replace(/—.*$/, '')
+        .split(',')[0]
+        .replace(/\b(hong kong|official website)\b/g, '')
+        .replace(/[^a-z0-9]/g, '');
+      const sameMerchant = (left, right) => {
+        const a = merchantKey(left);
+        const b = merchantKey(right);
+        return Boolean(a && b && (a === b || a.includes(b) || b.includes(a)));
+      };
+      const matchingRecommendations = () => (data.recommendations || []).filter(item => allTx().some(transaction => sameMerchant(transaction.merchant, item.merchant)));
+      const allowedCategories = new Set(['Restaurant', 'Travel', 'Shopping', 'Groceries', 'Clothing', 'Utilities']);
       const categoryData = () => {
         const totals = {};
         allTx().forEach(item => { totals[item.category] = (totals[item.category] || 0) + Number(item.amount); });
@@ -367,9 +392,11 @@
         }).join('') : '<div class="empty">No verified merchant match for this category in this training snapshot.</div>';
       }
       function renderRecommendations() {
-        const items = data.recommendations || [];
-        document.getElementById('recommendationList').innerHTML = items.map(item => `<div class="recommendation"><h3>${escapeHTML(neutralCopy(item.merchant))}</h3><p>${escapeHTML(conciseWhy(item.why))}</p><p><b>Do:</b> ${escapeHTML(neutralCopy(item.action || 'Check the source before payment.'))}</p>${sourceLink(item.source)}</div>`).join('');
-        document.getElementById('noMatchList').innerHTML = (data.noMatch && data.noMatch.length ? data.noMatch : ['No unverified matches are shown.']).map(item => `<li>${escapeHTML(neutralCopy(item))}</li>`).join('');
+        const items = matchingRecommendations();
+        document.getElementById('recommendationList').innerHTML = items.length ? items.map(item => `<div class="recommendation"><h3>${escapeHTML(neutralCopy(item.merchant))}</h3><p>${escapeHTML(conciseWhy(item.why))}</p><p><b>Do:</b> ${escapeHTML(neutralCopy(item.action || 'Check the source before payment.'))}</p>${sourceLink(item.source)}</div>`).join('') : '<div class="empty">No verified named offer match in the current local statement view.</div>';
+        const localNoMatch = extras.filter(transaction => !items.some(item => sameMerchant(transaction.merchant, item.merchant))).map(transaction => transaction.merchant);
+        const noMatch = [...new Set([...(data.noMatch || []), ...localNoMatch])];
+        document.getElementById('noMatchList').innerHTML = (noMatch.length ? noMatch : ['No unverified matches are shown.']).map(item => `<li>${escapeHTML(neutralCopy(item))}</li>`).join('');
       }
       function renderTransactions() {
         const transactions = allTx().filter(item => selected === 'All' || item.category === selected);
@@ -420,17 +447,60 @@
 
       const modal = document.getElementById('chargeModal');
       const form = document.getElementById('chargeForm');
+      const statementModal = document.getElementById('statementModal');
+      const statementForm = document.getElementById('statementForm');
+      const statementFile = document.getElementById('statementFile');
       const toast = document.getElementById('toast');
-      const closeModal = () => { modal.hidden = true; if (lastFocus) lastFocus.focus(); };
+      const showToast = message => {
+        toast.textContent = message;
+        toast.hidden = false;
+        setTimeout(() => { toast.hidden = true; }, 3500);
+      };
+      const closeModal = target => { target.hidden = true; if (lastFocus) lastFocus.focus(); };
       document.getElementById('openCharge').onclick = () => { lastFocus = document.activeElement; modal.hidden = false; form.elements.merchant.focus(); };
-      document.getElementById('closeCharge').onclick = closeModal;
-      modal.onclick = event => { if (event.target === modal) closeModal(); };
+      document.getElementById('openStatement').onclick = () => { lastFocus = document.activeElement; statementModal.hidden = false; statementFile.focus(); };
+      document.getElementById('closeCharge').onclick = () => closeModal(modal);
+      document.getElementById('closeStatement').onclick = () => closeModal(statementModal);
+      modal.onclick = event => { if (event.target === modal) closeModal(modal); };
+      statementModal.onclick = event => { if (event.target === statementModal) closeModal(statementModal); };
       document.addEventListener('keydown', event => {
         if (event.key === 'Escape') {
-          if (!modal.hidden) closeModal();
+          if (!modal.hidden) closeModal(modal);
+          if (!statementModal.hidden) closeModal(statementModal);
           if (sideNav.dataset.open === 'true') setNav(false);
         }
       });
+      const parseCSV = text => {
+        const rows = []; let row = []; let cell = ''; let quoted = false;
+        for (let index = 0; index < text.length; index += 1) {
+          const character = text[index];
+          if (quoted && character === '"' && text[index + 1] === '"') { cell += '"'; index += 1; }
+          else if (character === '"') quoted = !quoted;
+          else if (!quoted && character === ',') { row.push(cell); cell = ''; }
+          else if (!quoted && (character === '\n' || character === '\r')) {
+            if (character === '\r' && text[index + 1] === '\n') index += 1;
+            row.push(cell); if (row.some(value => value.trim())) rows.push(row); row = []; cell = '';
+          } else cell += character;
+        }
+        if (quoted) throw new Error('The CSV contains an unclosed quoted value.');
+        row.push(cell); if (row.some(value => value.trim())) rows.push(row);
+        const headers = (rows.shift() || []).map(value => value.trim().toLowerCase());
+        return rows.map(values => Object.fromEntries(headers.map((header, index) => [header, values[index] || ''])));
+      };
+      const normaliseImportedRows = rows => {
+        if (!Array.isArray(rows) || !rows.length || rows.length > 100) throw new Error('Use 1–100 mock records.');
+        return rows.map((row, index) => {
+          const fields = Object.fromEntries(Object.entries(row || {}).map(([key, value]) => [String(key).trim().toLowerCase(), String(value ?? '').trim()]));
+          const date = fields.date;
+          const merchant = fields.merchant;
+          const category = fields.category;
+          const location = fields.location;
+          const amount = Number(fields.amount);
+          const card = fields.card || 'Imported mock statement';
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !merchant || merchant.length > 80 || !allowedCategories.has(category) || !location || location.length > 50 || !Number.isFinite(amount) || amount <= 0 || amount > 1000000 || card.length > 80) throw new Error(`Record ${index + 1} does not match the mock-statement format.`);
+          return { date, merchant, category, location, amount, card, local: true, imported: true };
+        });
+      };
       form.onsubmit = event => {
         event.preventDefault();
         const fields = new FormData(form);
@@ -439,17 +509,30 @@
         modal.hidden = true;
         form.reset();
         renderAll();
-        toast.textContent = 'Charge added to this browser session only.';
-        toast.hidden = false;
-        setTimeout(() => { toast.hidden = true; }, 3500);
+        showToast('Charge added to this browser session only.');
+      };
+      statementForm.onsubmit = async event => {
+        event.preventDefault();
+        const file = statementFile.files && statementFile.files[0];
+        if (!file) return;
+        if (file.size > 200000 || !/\.(csv|json)$/i.test(file.name)) { showToast('Choose a CSV or JSON mock statement up to 200 KB.'); return; }
+        try {
+          const text = await file.text();
+          const rows = /\.json$/i.test(file.name) ? (() => { const parsed = JSON.parse(text); return Array.isArray(parsed) ? parsed : parsed.transactions; })() : parseCSV(text);
+          const imported = normaliseImportedRows(rows);
+          extras.push(...imported);
+          sessionStorage.setItem('r-offers-training-extras', JSON.stringify(extras));
+          statementModal.hidden = true;
+          statementForm.reset();
+          renderAll();
+          showToast(`${imported.length} mock record${imported.length === 1 ? '' : 's'} analysed in this browser session.`);
+        } catch (error) { showToast(error.message || 'The mock statement could not be read.'); }
       };
       document.getElementById('clearExtras').onclick = () => {
         extras = [];
         sessionStorage.removeItem('r-offers-training-extras');
         renderAll();
-        toast.textContent = 'Local training inputs cleared from this browser session.';
-        toast.hidden = false;
-        setTimeout(() => { toast.hidden = true; }, 3500);
+        showToast('Local training inputs cleared from this browser session.');
       };
       renderAll();
     })();
