@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Offer Atlas — demo spending & public offers</title>
-  <meta name="description" content="A local monitor for demo card spending and public offer reminders.">
+  <title>R Offers — training spending & public offers</title>
+  <meta name="description" content="A local-only training monitor for illustrative spending and public offer reminders."
   <style>
     :root {
       --paper: #fbfbfb;
@@ -110,6 +110,12 @@
     .meta { color: var(--muted) !important; }
     .source { margin-top: auto; padding-top: 15px; font-size: 12px; font-weight: 700; }
     .source a { color: var(--red-dark); }
+    .merchant-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
+    .merchant-tile { display: grid; width: 42px; height: 42px; flex: 0 0 42px; place-items: center; border: 1px solid var(--charcoal); background: #f2f2f2; color: var(--red-dark); font-size: 13px; font-weight: 700; letter-spacing: .04em; }
+    .offer-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: auto; padding-top: 15px; font-size: 12px; font-weight: 700; }
+    .offer-actions .source { margin: 0; padding: 0; }
+    .reservation-link { color: var(--red-dark); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
     .lower-grid { display: grid; grid-template-columns: 1.08fr .92fr; gap: 24px; }
     .recommendations, .no-match { padding: 20px 0 0; }
@@ -207,40 +213,40 @@
 <body>
   <main class="app-shell">
     <header class="topbar">
-      <a class="brand" href="#overview" aria-label="Offer Atlas overview"><span class="brand-mark" aria-hidden="true">O</span>Offer Atlas</a>
+      <a class="brand" href="#overview" aria-label="R Offers overview"><span class="brand-mark" aria-hidden="true">R</span>R Offers</a>
       <nav class="desktop-nav" aria-label="Monitor sections">
         <button class="nav-link" data-scroll="overview">Overview</button>
         <button class="nav-link" data-scroll="offers">Offer record</button>
         <button class="nav-link" data-scroll="recommendations">Scenario review</button>
-        <button class="nav-link" data-scroll="statements">Demo ledger</button>
+        <button class="nav-link" data-scroll="statements">Training ledger</button>
       </nav>
       <div class="topbar-meta"><span class="snapshot">Daily snapshot</span><span id="updatedAt">Loading</span></div>
       <button class="mobile-menu" id="openNav" aria-label="Open navigation" aria-controls="mobileNav" aria-expanded="false">Menu</button>
     </header>
 
-    <div class="training-banner" role="note"><p><strong>Simulated training material — public information only.</strong> This local monitor uses approved demo statements and public offer information. It is not a bank service, financial advice, an eligibility decision, or an affiliation claim.</p></div>
+    <div class="training-banner" role="note"><p><strong>Illustrative training data — do not enter real personal, account, card or payment information.</strong></p></div>
 
-    <section class="overview" id="overview" aria-label="Demo scenario overview">
+    <section class="overview" id="overview" aria-label="Training scenario overview">
       <article class="summary">
         <div class="summary-head">
           <div>
-            <div class="eyebrow" id="scenarioPeriod">Demo scenario</div>
+            <div class="eyebrow" id="scenarioPeriod">Training scenario</div>
             <h1>Daily offer monitor</h1>
-            <p class="summary-copy">A concise review of demo spending signals and public offer records. Check the source, payment method and eligibility before relying on any offer.</p>
+            <p class="summary-copy">Illustrative spend with source-linked public offers. Confirm terms before payment.</p>
           </div>
-          <button class="primary" id="openCharge">Add demo charge</button>
+          <button class="primary" id="openCharge">Add charge</button>
         </div>
-        <div class="summary-amount" id="totalSpend">— <span>demo period spend</span></div>
-        <div class="summary-stats" aria-label="Demo spending summary">
+        <div class="summary-amount" id="totalSpend">— <span>training period spend</span></div>
+        <div class="summary-stats" aria-label="Training spending summary">
           <div class="stat"><b id="transactionCount">—</b><span>entries</span></div>
           <div class="stat"><b id="categoryCount">—</b><span>categories</span></div>
           <div class="stat"><b id="topCategory">—</b><span>largest category</span></div>
         </div>
       </article>
-      <aside class="summary-side" aria-label="Demo spend distribution">
-        <div class="side-title"><div><div class="eyebrow">Spend distribution</div><h2>Category proportion</h2></div><span class="fine-print">Demo HKD</span></div>
+      <aside class="summary-side" aria-label="Training spend distribution">
+        <div class="side-title"><div><div class="eyebrow">Spend distribution</div><h2>Category proportion</h2></div><span class="fine-print">Training HKD</span></div>
         <div class="chart-layout">
-          <div class="donut" id="donut" role="img" aria-label="Demo spending by category"><div class="donut-label"><span>Total</span><b id="donutTotal">—</b></div></div>
+          <div class="donut" id="donut" role="img" aria-label="Training spending by category"><div class="donut-label"><span>Total</span><b id="donutTotal">—</b></div></div>
           <div class="category-bars" id="legend" aria-label="Category proportions"></div>
         </div>
       </aside>
@@ -253,38 +259,38 @@
     </section>
 
     <section class="section" id="recommendations">
-      <div class="section-heading"><div><div class="eyebrow">Conditional review</div><h2>Demo scenario actions</h2></div><p>Only named matches recorded by the daily workflow are shown.</p></div>
+      <div class="section-heading"><div><div class="eyebrow">Conditional review</div><h2>Scenario actions</h2></div><p>Named matches only.</p></div>
       <div class="lower-grid">
         <article class="recommendations" id="recommendationList"></article>
-        <aside class="no-match"><div class="eyebrow">Uncertainty state</div><h2>No confirmed match</h2><p>These demo merchants or categories do not have a verified named match in this snapshot.</p><ul id="noMatchList"></ul></aside>
+        <aside class="no-match"><div class="eyebrow">Uncertainty state</div><h2>No confirmed match</h2><p>These named merchants or categories have no verified match in this snapshot.</p><ul id="noMatchList"></ul></aside>
       </div>
     </section>
 
     <section class="section" id="statements">
-      <div class="section-heading"><div><div class="eyebrow">Demo ledger</div><h2>Statement transactions</h2></div><div class="ledger-toolbar"><label for="statementFilter">Filter</label><select class="select" id="statementFilter"><option value="All">All categories</option></select><button class="secondary" id="clearExtras">Clear local inputs</button></div></div>
-      <div class="table-wrap"><table class="transactions"><thead><tr><th>Date</th><th>Merchant</th><th>Category</th><th>Location</th><th>Demo amount</th><th>Scenario card</th></tr></thead><tbody id="transactionRows"></tbody></table></div>
-      <div class="empty" id="emptyTransactions" hidden>No demo transactions are in this category.</div>
+      <div class="section-heading"><div><div class="eyebrow">Training ledger</div><h2>Statement transactions</h2></div><div class="ledger-toolbar"><label for="statementFilter">Filter</label><select class="select" id="statementFilter"><option value="All">All categories</option></select><button class="secondary" id="clearExtras">Clear local inputs</button></div></div>
+      <div class="table-wrap"><table class="transactions"><thead><tr><th>Date</th><th>Merchant</th><th>Category</th><th>Location</th><th>Training amount</th><th>Scenario card</th></tr></thead><tbody id="transactionRows"></tbody></table></div>
+      <div class="empty" id="emptyTransactions" hidden>No training transactions are in this category.</div>
     </section>
 
-    <footer class="footer"><p><strong>Offer Atlas is a local simulated-training monitor.</strong> Local demo charges remain in this browser session only.</p><p>Daily snapshot <code id="runId">—</code> · Every displayed offer claim links to a public source · No live customer data, payment details or account data are requested.</p></footer>
+    <footer class="footer"><p><strong>R Offers is a local training monitor.</strong> Local charges remain in this browser session only.</p><p>Daily snapshot · Public-source links included · No live customer or payment data requested.</p></footer>
   </main>
 
   <div class="scrim" id="navScrim" hidden></div>
-  <aside class="side-nav" id="mobileNav" data-open="false" aria-label="Mobile navigation"><div class="side-nav-head"><span>Offer Atlas</span><button class="close-nav" id="closeNav" aria-label="Close navigation">×</button></div><button data-scroll="overview">Overview</button><button data-scroll="offers">Offer record</button><button data-scroll="recommendations">Scenario review</button><button data-scroll="statements">Demo ledger</button><p class="nav-status"><span class="snapshot">Daily snapshot</span><br><span id="mobileUpdatedAt">Loading</span></p></aside>
+  <aside class="side-nav" id="mobileNav" data-open="false" aria-label="Mobile navigation"><div class="side-nav-head"><span>R Offers</span><button class="close-nav" id="closeNav" aria-label="Close navigation">×</button></div><button data-scroll="overview">Overview</button><button data-scroll="offers">Offer record</button><button data-scroll="recommendations">Scenario review</button><button data-scroll="statements">Training ledger</button><p class="nav-status"><span class="snapshot">Daily snapshot</span><br><span id="mobileUpdatedAt">Loading</span></p></aside>
 
   <div class="modal" id="chargeModal" hidden role="dialog" aria-modal="true" aria-labelledby="chargeTitle">
     <form class="dialog" id="chargeForm">
-      <div class="eyebrow">Local sandbox input</div><h2 id="chargeTitle">Add a demo charge</h2>
-      <p class="meta">This recalculates the local chart and statement preview only. It does not send data anywhere.</p>
-      <div class="warning"><strong>Demo training data only — do not enter real transactions or personal information.</strong> Do not provide card numbers, customer data or internal information.</div>
+      <div class="eyebrow">Local training input</div><h2 id="chargeTitle">Add a charge</h2>
+      <p class="meta">Updates this browser’s training preview only.</p>
+      <div class="warning"><strong>Illustrative training data — do not enter real personal, account, card or payment information.</strong></div>
       <div class="form-grid">
         <label class="field"><span>Date</span><input type="date" name="date" required value="2026-09-30"></label>
         <label class="field"><span>Amount (HKD)</span><input type="number" name="amount" min="0.01" step="0.01" required placeholder="0.00"></label>
-        <label class="field full"><span>Demo merchant label</span><input name="merchant" maxlength="80" required placeholder="Example: Demo Café"></label>
+        <label class="field full"><span>Merchant label</span><input name="merchant" maxlength="80" required placeholder="Example: Training Café"></label>
         <label class="field"><span>Category</span><select name="category" required><option>Restaurant</option><option>Travel</option><option>Shopping</option><option>Groceries</option><option>Clothing</option><option>Utilities</option></select></label>
         <label class="field"><span>Location</span><input name="location" maxlength="50" required value="Hong Kong"></label>
       </div>
-      <label class="check"><input type="checkbox" name="confirm" required><span>I confirm this is demo training data and contains no real transaction or personal information.</span></label>
+      <label class="check"><input type="checkbox" name="confirm" required><span>I confirm this is illustrative training data with no real personal or payment information.</span></label>
       <div class="dialog-footer"><button type="button" class="secondary" id="closeCharge">Cancel</button><button class="primary" type="submit">Add local preview</button></div>
     </form>
   </div>
@@ -313,7 +319,7 @@
       let selected = 'All';
       let extras = [];
       let lastFocus = null;
-      try { extras = JSON.parse(sessionStorage.getItem('offer-atlas-demo-extras') || '[]'); } catch (error) { extras = []; }
+      try { extras = JSON.parse(sessionStorage.getItem('r-offers-training-extras') || '[]'); } catch (error) { extras = []; }
       const allTx = () => [...data.transactions, ...extras];
       const categoryData = () => {
         const totals = {};
@@ -332,7 +338,7 @@
         });
         document.getElementById('donut').style.background = `conic-gradient(${stops.join(',')})`;
         document.getElementById('donutTotal').textContent = fmt(total);
-        document.getElementById('totalSpend').innerHTML = `${fmt(total)} <span>demo period spend</span>`;
+        document.getElementById('totalSpend').innerHTML = `${fmt(total)} <span>training period spend</span>`;
         document.getElementById('transactionCount').textContent = allTx().length;
         document.getElementById('categoryCount').textContent = list.length;
         document.getElementById('topCategory').textContent = list[0] ? (labels[list[0].name] || list[0].name) : '—';
@@ -344,9 +350,15 @@
       }
       function renderOffers() {
         const category = selected === 'All' ? null : selected;
-        const offers = data.offers.filter(item => !category || item.category === category);
-        document.getElementById('offerCount').textContent = `${offers.length} verified offer group${offers.length === 1 ? '' : 's'} in this snapshot`;
-        document.getElementById('offerGrid').innerHTML = offers.length ? offers.map(offer => `<article class="offer-card"><span class="tag">Verified public offer</span><div class="eyebrow">${escapeHTML(labels[offer.category] || offer.category)}</div><h3>${escapeHTML(neutralCopy(offer.merchant))}</h3><p>${escapeHTML(neutralCopy(offer.offer || 'Offer details retained in the public-source record.'))}</p><p class="meta">${escapeHTML(neutralCopy(offer.when || 'Check live availability before payment.'))}</p><p class="meta">${escapeHTML(neutralCopy(offer.conditions || 'Eligibility and exclusions apply.'))}</p><div class="source">${sourceLink(offer.source)}</div></article>`).join('') : '<div class="empty">No verified merchant match for this category in today’s demo scenario.</div>';
+        const offerGroups = data.offers.filter(item => !category || item.category === category || (category === 'Restaurant' && item.category === 'Dining'));
+        const offers = offerGroups.flatMap(offer => String(offer.merchant || '').split(/,\s*|\s+and\s+/).filter(Boolean).map(merchant => ({ ...offer, merchant })));
+        document.getElementById('offerCount').textContent = `${offers.length} verified offer${offers.length === 1 ? '' : 's'} in this snapshot`;
+        document.getElementById('offerGrid').innerHTML = offers.length ? offers.map((offer, index) => {
+          const merchant = neutralCopy(offer.merchant);
+          const tile = (merchant.match(/[A-Za-z0-9]+/g) || ['R']).map(part => part[0]).join('').slice(0, 2).toUpperCase();
+          const reservation = (offer.category === 'Restaurant' || offer.category === 'Dining') ? `<a class="reservation-link" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(`${merchant} Hong Kong reservation`)}" target="_blank" rel="noopener noreferrer" aria-label="Find a table for ${escapeHTML(merchant)} in Google Maps, opens in a new tab">Find a table</a>` : '';
+          return `<article class="offer-card" aria-label="${escapeHTML(merchant)} verified public offer"><span class="tag">Verified public offer</span><div class="merchant-row"><div class="eyebrow">${escapeHTML(labels[offer.category] || offer.category)}</div><span class="merchant-tile" title="${escapeHTML(merchant)}" aria-label="Merchant: ${escapeHTML(merchant)}">${tile}</span></div><h3 class="sr-only">${escapeHTML(merchant)}</h3><p>${escapeHTML(neutralCopy(offer.offer || 'Offer details retained in the public-source record.'))}</p><p class="meta">${escapeHTML(neutralCopy(offer.when || 'Check live availability before payment.'))}</p><p class="meta">${escapeHTML(neutralCopy(offer.conditions || 'Eligibility and exclusions apply.'))}</p><div class="offer-actions">${reservation}<div class="source">${sourceLink(offer.source)}</div></div></article>`;
+        }).join('') : '<div class="empty">No verified merchant match for this category in this training snapshot.</div>';
       }
       function renderRecommendations() {
         const items = data.recommendations || [];
@@ -355,7 +367,7 @@
       }
       function renderTransactions() {
         const transactions = allTx().filter(item => selected === 'All' || item.category === selected);
-        document.getElementById('transactionRows').innerHTML = transactions.map(item => `<tr><td>${escapeHTML(item.date)}</td><td>${escapeHTML(neutralCopy(item.merchant))}${item.local ? '<br><span class="card-label">Local demo preview</span>' : ''}</td><td>${escapeHTML(labels[item.category] || item.category)}</td><td>${escapeHTML(item.location)}</td><td class="amount">${fmt(Number(item.amount))}</td><td><span class="card-label">${escapeHTML(neutralCopy(item.card || 'Local preview'))}</span></td></tr>`).join('');
+        document.getElementById('transactionRows').innerHTML = transactions.map(item => `<tr><td>${escapeHTML(item.date)}</td><td>${escapeHTML(neutralCopy(item.merchant))}${item.local ? '<br><span class="card-label">Local training preview</span>' : ''}</td><td>${escapeHTML(labels[item.category] || item.category)}</td><td>${escapeHTML(item.location)}</td><td class="amount">${fmt(Number(item.amount))}</td><td><span class="card-label">${escapeHTML(neutralCopy(item.card || 'Local preview'))}</span></td></tr>`).join('');
         document.getElementById('emptyTransactions').hidden = transactions.length > 0;
       }
       function renderFilters() {
@@ -372,10 +384,9 @@
       function renderAll() { drawChart(); renderFilters(); renderOffers(); renderRecommendations(); renderTransactions(); }
 
       const formattedDate = new Date(data.generatedAt).toLocaleDateString('en-HK', { day: 'numeric', month: 'short', year: 'numeric' });
-      document.getElementById('scenarioPeriod').textContent = `${data.scenario.period} · demo scenario`;
+      document.getElementById('scenarioPeriod').textContent = `${data.scenario.period} · training scenario`;
       document.getElementById('updatedAt').textContent = formattedDate;
       document.getElementById('mobileUpdatedAt').textContent = `Updated ${formattedDate}`;
-      document.getElementById('runId').textContent = data.runId;
       const select = document.getElementById('statementFilter');
       Object.keys(colors).forEach(category => select.insertAdjacentHTML('beforeend', `<option value="${category}">${labels[category]}</option>`));
       select.onchange = () => { selected = select.value; renderFilters(); renderOffers(); renderTransactions(); };
@@ -418,19 +429,19 @@
         event.preventDefault();
         const fields = new FormData(form);
         extras.push({ date: fields.get('date'), merchant: fields.get('merchant'), category: fields.get('category'), location: fields.get('location'), amount: Number(fields.get('amount')), local: true });
-        sessionStorage.setItem('offer-atlas-demo-extras', JSON.stringify(extras));
+        sessionStorage.setItem('r-offers-training-extras', JSON.stringify(extras));
         modal.hidden = true;
         form.reset();
         renderAll();
-        toast.textContent = 'Demo charge added to this browser session only.';
+        toast.textContent = 'Charge added to this browser session only.';
         toast.hidden = false;
         setTimeout(() => { toast.hidden = true; }, 3500);
       };
       document.getElementById('clearExtras').onclick = () => {
         extras = [];
-        sessionStorage.removeItem('offer-atlas-demo-extras');
+        sessionStorage.removeItem('r-offers-training-extras');
         renderAll();
-        toast.textContent = 'Local demo inputs cleared from this browser session.';
+        toast.textContent = 'Local training inputs cleared from this browser session.';
         toast.hidden = false;
         setTimeout(() => { toast.hidden = true; }, 3500);
       };
