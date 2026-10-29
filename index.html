@@ -85,8 +85,9 @@
     .dot { width: 8px; height: 8px; border-radius: 50%; }
     .category-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .category-row strong { font-size: 10px; text-align: right; font-variant-numeric: tabular-nums; }
-    .bar-track { grid-column: 2 / 4; height: 3px; overflow: hidden; background: #d7d7d7; }
-    .bar-fill { width: var(--percent); height: 100%; background: var(--bar); }
+    .bar-track { grid-column: 2 / 4; height: 6px; overflow: hidden; background: #d7d7d7; }
+    .bar-fill { display: block; width: var(--percent); max-width: 100%; height: 100%; background: var(--bar); transition: width 180ms ease-out; }
+    @media (prefers-reduced-motion: reduce) { .bar-fill { transition: none; } }
 
     .section { margin-top: 34px; }
     .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--charcoal); }
