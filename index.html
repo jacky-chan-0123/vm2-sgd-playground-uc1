@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="五分鐘手機攝影演講：建築、山景與大樹，附互動構圖示意、演講計時及現場實測流程。">
+<title>取景之前｜5 分鐘手機攝影課</title>
+<style>
+:root{--paper:#f6f4ed;--white:#fffefa;--ink:#24352e;--green:#264c3c;--sage:#dde5d6;--muted:#6a736a;--line:#dcded3;--gold:#bb8245}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif}
+button,input,select{font:inherit}
+button,a,input{touch-action:manipulation}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+a{color:inherit;text-decoration:none}
+button{color:inherit}
+.wrap{max-width:1160px;margin:auto;padding:0 24px}
+header{position:sticky;top:0;z-index:20;background:rgba(246,244,237,.96);border-bottom:1px solid var(--line)}
+.nav{display:flex;justify-content:space-between;align-items:center;min-height:74px;gap:15px}
+.brand{font-weight:800;letter-spacing:2px;display:flex;align-items:center;gap:10px}
+.brand-mark{width:30px;height:30px;border:2px solid var(--green);border-radius:9px;display:grid;place-items:center}
+.brand-mark:after{content:"";width:11px;height:11px;border:2px solid var(--green);border-radius:50%}
+nav{display:flex;align-items:center;gap:25px;font-size:13px}
+.nav-cta{background:var(--green);color:white;padding:10px 17px;border-radius:30px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--green);text-transform:uppercase}
+.hero{padding:65px 0 48px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:55px}
+h1{font-size:clamp(38px,5vw,65px);line-height:1.2;letter-spacing:-2px;margin:20px 0}
+h1 em{font-style:normal;color:var(--green)}
+.lead{color:var(--muted);font-size:16px;line-height:1.95;max-width:470px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:25px 0}
+.tag{border:1px solid var(--line);border-radius:25px;padding:7px 12px;font-size:12px}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:transparent;border-radius:30px;padding:12px 20px;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:9px}
+.btn.primary{background:var(--green);border-color:var(--green);color:white}
+.btn:hover{filter:brightness(.94)}
+.cover{background:var(--green);border-radius:24px;padding:25px;position:relative;overflow:hidden;color:var(--paper)}
+.cover-top{display:flex;justify-content:space-between;font-size:10px;letter-spacing:2px;color:#c6d4c0}
+.cover svg{width:100%;height:auto;display:block;margin:15px 0}
+.cover-caption{display:flex;justify-content:space-between;align-items:end;gap:10px}
+.cover-caption strong{font-size:18px;line-height:1.5}
+.cover-caption span{font-size:10px;color:#d2dccb;line-height:1.7}
+.principle{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:21px 0;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.principle p{margin:0;font-size:14px;color:var(--muted)}
+.principle strong{font-size:18px}
+.section{padding:60px 0}
+.section-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:25px}
+h2{font-size:30px;margin:10px 0 0;letter-spacing:-1px}
+.section-heading p{font-size:13px;color:var(--muted);line-height:1.7;margin:0;max-width:320px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.tab{border:1px solid var(--line);background:var(--white);border-radius:25px;padding:10px 18px;font-size:13px}
+.tab.active{background:var(--green);border-color:var(--green);color:white}
+.lab{display:grid;grid-template-columns:1.12fr 1fr;gap:28px}
+.viewfinder{background:#d9e0d6;border-radius:18px;position:relative;overflow:hidden;aspect-ratio:4/3}
+.viewfinder>svg{width:100%;height:100%;display:block}
+.photo-label{position:absolute;top:15px;left:15px;padding:7px 11px;background:rgba(255,254,250,.94);border-radius:20px;font-size:11px;font-weight:700}
+.sim-label{position:absolute;right:13px;bottom:13px;background:rgba(30,53,42,.8);color:white;border-radius:20px;padding:5px 9px;font-size:10px}
+.grid-overlay{position:absolute;inset:0;pointer-events:none}
+.grid-overlay:before,.grid-overlay:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.5)}
+.grid-overlay:before{top:0;bottom:0;left:33.333%;width:33.333%;border-top:0;border-bottom:0}
+.grid-overlay:after{left:0;right:0;top:33.333%;height:33.333%;border-left:0;border-right:0}
+.level{position:absolute;bottom:25px;left:calc(50% - 35px);width:70px;border-top:2px solid #a8ec95;pointer-events:none}
+.preview-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:13px 0}
+.preview-footer label{font-size:12px;color:var(--muted)}
+.note{font-size:11px;color:var(--muted);line-height:1.8}
+.controls{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:24px}
+.controls h3{font-size:23px;margin:0 0 10px}
+.controls .intro{color:var(--muted);font-size:14px;line-height:1.8;margin:0 0 20px}
+.control{margin-top:17px}
+.control label{display:flex;justify-content:space-between;gap:12px;font-size:13px;font-weight:600;margin-bottom:9px}
+input[type=range]{width:100%;accent-color:var(--green)}
+select{width:100%;padding:10px 12px;border-radius:9px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.tip{margin-top:20px;padding:15px;border-radius:11px;background:#edf1e8;font-size:13px;line-height:1.8}
+.control-buttons{display:flex;gap:8px;margin-top:17px}
+.control-buttons button{flex:1;border:1px solid var(--line);border-radius:9px;padding:10px 8px;background:var(--paper);font-size:12px}
+.control-buttons button.selected{background:var(--green);color:white}
+.lesson{display:grid;grid-template-columns:310px 1fr;gap:28px;align-items:start}
+.timer{position:sticky;top:95px;background:var(--green);color:white;border-radius:18px;padding:25px}
+.timer-label{font-size:12px;color:#c8d7c1;display:flex;justify-content:space-between}
+.timer-digits{font-variant-numeric:tabular-nums;font-size:58px;letter-spacing:-2px;margin:16px 0}
+.timer-digits small{font-size:15px;letter-spacing:0;color:#bdd0b7}
+.track{height:5px;border-radius:5px;background:#58705b;overflow:hidden}
+.fill{height:100%;background:#d1ddac;width:0;transition:width .3s}
+.timer p{font-size:12px;line-height:1.9;color:#d2dfca}
+.timer .actions{margin-top:20px}
+.timer .btn{padding:10px 17px;border-color:#81917b;color:white}
+.timer .btn.primary{background:var(--paper);color:var(--green)}
+.current-section{min-height:44px;margin-top:18px;font-size:14px;line-height:1.6}
+.script-tools{display:flex;gap:12px;margin-bottom:14px;font-size:12px;align-items:center}
+.text-button{border:0;background:none;text-decoration:underline;color:var(--green);padding:5px 0}
+details{border:1px solid var(--line);background:var(--white);border-radius:12px;margin-bottom:10px;overflow:hidden}
+details.current{border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+summary{cursor:pointer;display:flex;align-items:center;gap:13px;padding:18px;list-style:none;font-weight:700;font-size:14px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"＋";margin-left:auto;color:var(--muted)}
+details[open] summary:after{content:"－"}
+.time-tag{background:var(--paper);color:var(--muted);padding:5px 7px;border-radius:5px;font-size:10px;white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:400}
+.script-body{border-top:1px solid var(--line);padding:0 20px 20px}
+.script-body p{font-size:15px;line-height:2.05;margin:16px 0}
+.stage{background:#edf1e8;padding:11px 13px;border-radius:8px;font-size:12px;line-height:1.8;color:var(--green)}
+.demo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.demo{background:var(--white);border:1px solid var(--line);border-radius:15px;padding:22px}
+.demo-number{font-size:11px;letter-spacing:2px;color:var(--gold);font-weight:700}
+.demo h3{font-size:18px;margin:12px 0}
+.demo p{font-size:13px;line-height:1.85;color:var(--muted)}
+.demo .observe{padding-top:12px;border-top:1px solid var(--line);color:var(--green)}
+.demo label{display:flex;gap:8px;align-items:center;font-size:12px;margin-top:18px;color:var(--muted)}
+input[type=checkbox]{accent-color:var(--green)}
+.safety{display:grid;grid-template-columns:1fr 1fr;gap:35px;padding:28px;background:var(--sage);border-radius:16px;margin-top:25px}
+.safety h3{font-size:16px;margin:0 0 10px}
+.safety p{font-size:13px;line-height:1.9;margin:0;color:#4a5a4d}
+.publish{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:24px;border:1px solid var(--line);border-radius:16px;background:var(--white)}
+.publish h3{margin:0 0 10px;font-size:18px}
+.publish p{font-size:13px;line-height:1.9;color:var(--muted);margin:0}
+footer{border-top:1px solid var(--line);padding:25px 0}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;font-size:11px;color:var(--muted);line-height:1.8}
+@media(max-width:850px){
+.hero{gap:25px;padding-top:40px}.lab{grid-template-columns:1fr 1fr;gap:18px}
+.lesson{grid-template-columns:260px 1fr}.demo-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+.wrap{padding:0 18px}.nav{min-height:64px}.brand{font-size:14px}nav{gap:12px}nav a:first-child{display:none}
+.hero{grid-template-columns:1fr;gap:28px;padding:35px 0}.cover{padding:20px}.hero h1{font-size:44px}
+.section{padding:40px 0}.section-heading{align-items:start;flex-direction:column;gap:12px}h2{font-size:27px}
+.principle{align-items:start;flex-direction:column;gap:9px}.principle strong{font-size:17px}
+.lab,.lesson,.safety{grid-template-columns:1fr}.timer{position:static}.timer-digits{font-size:48px;margin:10px 0}
+.demo-grid{grid-template-columns:1fr}.controls{padding:20px}.publish{flex-direction:column;align-items:start}
+summary{padding:15px;gap:9px;font-size:13px}.time-tag{font-size:9px}
+footer .wrap{flex-direction:column;gap:8px}.safety{gap:22px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.fill{transition:none}}
+@media print{
+header,.hero,.principle,#lab,#tests,#publish,footer,.timer,.script-tools{display:none!important}
+body{background:white}.section{padding:0}.lesson{display:block}.wrap{max-width:none}
+details{break-inside:avoid;border:0}.script-body{display:block!important}
+summary:after{display:none}.section-heading p{display:none}
+}
+</style></head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a href="#" class="brand"><span class="brand-mark" aria-hidden="true"></span>取景之前</a>
+    <nav aria-label="主導覽">
+      <a href="#lab">互動示範</a>
+      <a href="#tests">實測流程</a>
+      <a href="#talk" class="nav-cta">開始 5 分鐘演講 ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Mobile photography / 5-minute talk</div>
+      <h1>手機拿直，<br><em>世界不用拉直。</em></h1>
+      <p class="lead">從滙豐總部的鋼構線條，到流水響風格的山林。用五分鐘，學會判斷站位、角度與光線，讓每一張照片都有理由。</p>
+      <div class="tags">
+        <span class="tag">01 建築</span><span class="tag">02 山景與大樹</span><span class="tag">03 A / B 比較</span>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="#talk">▶ 打開演講稿</a>
+        <a class="btn" href="#lab">試試構圖 ↓</a>
+      </div>
+    </div>
+    <div class="cover">
+      <div class="cover-top"><span>FIELD GUIDE / HONG KONG</span><span>01 — 03</span></div>
+      <svg viewBox="0 0 480 310" role="img" aria-label="建築、山脊與大樹的簡化線條插畫">
+        <g fill="none" stroke="#e7e6cc" stroke-width="2">
+          <path d="M35 250V95H90V68H195V95H242V250Z"></path>
+          <path d="M65 250V91M100 250V70M184 250V70M212 250V91M35 128H242M35 177H242M35 225H242"></path>
+          <path d="M65 95L184 128L100 177L212 225M212 95L100 128L184 177L65 225"></path>
+          <path d="M106 68V51H181V68M24 250H252"></path>
+          <path d="M265 250L305 183L337 201L388 143L456 250" stroke="#a5bea0"></path>
+          <path d="M375 251L373 111M374 172L331 130M374 159L418 108M374 124L357 89" stroke="#d4cb9d" stroke-width="5"></path>
+        </g>
+        <g fill="#8da477">
+          <circle cx="367" cy="89" r="35"></circle><circle cx="332" cy="119" r="27"></circle>
+          <circle cx="402" cy="99" r="30"></circle><circle cx="378" cy="123" r="28"></circle>
+        </g>
+        <path d="M20 269H460" stroke="#789273"></path>
+        <path d="M142 31V282" stroke="#8fa789" stroke-dasharray="4 7"></path>
+      </svg>
+      <div class="cover-caption">
+        <strong>1× · 退後 · 拿直<br>稍降曝光</strong>
+        <span>簡化構圖插畫<br>非實地照片</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="principle">
+    <strong>山保留坡度，樹保留姿態。</strong>
+    <p>水平儀校正的是手機，不是把大自然全部拉直。</p>
+  </div>
+
+  <section id="lab" class="section">
+    <div class="section-heading">
+      <div><div class="eyebrow">01 / Interactive framing</div><h2>改一個因素，看一次差別。</h2></div>
+      <p>以下是概念模擬，不是相機成像預測。真正的效果，要用自己的手機實測。</p>
+    </div>
+    <div class="tabs" role="group" aria-label="選擇拍攝主題">
+      <button class="tab active" data-topic="building" aria-pressed="true">建築 · 站位與光線</button>
+      <button class="tab" data-topic="mountain" aria-pressed="false">山景 · 保留坡度</button>
+      <button class="tab" data-topic="tree" aria-pressed="false">大樹 · 保留姿態</button>
+    </div>
+    <div class="lab">
+      <div>
+        <div class="viewfinder">
+          <svg id="scene" viewBox="0 0 600 450" role="img" aria-label="手機攝影構圖互動示意"><defs><clipPath id="faceClip"><rect x="0" y="0" width="600" height="450"></rect></clipPath></defs>
+   <rect width="600" height="450" fill="#d7e1dc"></rect>
+   <path d="M0 317L62 264L130 290L219 240L335 276L442 232L600 302V450H0Z" fill="#7e9383" opacity=".42"></path>
+   <rect y="405" width="600" height="45" fill="#b6b6a0"></rect><svg x="0" y="0" width="600" height="420" viewBox="0 0 600 420">
+       <defs><clipPath id="perspectiveClip"><polygon points="75,28 525,28 550,415 50,415"></polygon></clipPath></defs>
+       <g clip-path="url(#perspectiveClip)">
+        <g transform="translate(0 0) scale(1 1)"><rect x="143" y="84" width="284" height="303" fill="#547178" stroke="#697775" stroke-width="2"></rect><path d="M148 103H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 88V101" stroke="#697775" stroke-width="1"></path><path d="M176 88V101" stroke="#697775" stroke-width="1"></path><path d="M198 88V101" stroke="#697775" stroke-width="1"></path><path d="M220 88V101" stroke="#697775" stroke-width="1"></path><path d="M242 88V101" stroke="#697775" stroke-width="1"></path><path d="M264 88V101" stroke="#697775" stroke-width="1"></path><path d="M286 88V101" stroke="#697775" stroke-width="1"></path><path d="M308 88V101" stroke="#697775" stroke-width="1"></path><path d="M330 88V101" stroke="#697775" stroke-width="1"></path><path d="M352 88V101" stroke="#697775" stroke-width="1"></path><path d="M374 88V101" stroke="#697775" stroke-width="1"></path><path d="M396 88V101" stroke="#697775" stroke-width="1"></path><path d="M418 88V101" stroke="#697775" stroke-width="1"></path><path d="M148 122H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 107V120" stroke="#697775" stroke-width="1"></path><path d="M176 107V120" stroke="#697775" stroke-width="1"></path><path d="M198 107V120" stroke="#697775" stroke-width="1"></path><path d="M220 107V120" stroke="#697775" stroke-width="1"></path><path d="M242 107V120" stroke="#697775" stroke-width="1"></path><path d="M264 107V120" stroke="#697775" stroke-width="1"></path><path d="M286 107V120" stroke="#697775" stroke-width="1"></path><path d="M308 107V120" stroke="#697775" stroke-width="1"></path><path d="M330 107V120" stroke="#697775" stroke-width="1"></path><path d="M352 107V120" stroke="#697775" stroke-width="1"></path><path d="M374 107V120" stroke="#697775" stroke-width="1"></path><path d="M396 107V120" stroke="#697775" stroke-width="1"></path><path d="M418 107V120" stroke="#697775" stroke-width="1"></path><path d="M148 141H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 126V139" stroke="#697775" stroke-width="1"></path><path d="M176 126V139" stroke="#697775" stroke-width="1"></path><path d="M198 126V139" stroke="#697775" stroke-width="1"></path><path d="M220 126V139" stroke="#697775" stroke-width="1"></path><path d="M242 126V139" stroke="#697775" stroke-width="1"></path><path d="M264 126V139" stroke="#697775" stroke-width="1"></path><path d="M286 126V139" stroke="#697775" stroke-width="1"></path><path d="M308 126V139" stroke="#697775" stroke-width="1"></path><path d="M330 126V139" stroke="#697775" stroke-width="1"></path><path d="M352 126V139" stroke="#697775" stroke-width="1"></path><path d="M374 126V139" stroke="#697775" stroke-width="1"></path><path d="M396 126V139" stroke="#697775" stroke-width="1"></path><path d="M418 126V139" stroke="#697775" stroke-width="1"></path><path d="M148 160H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 145V158" stroke="#697775" stroke-width="1"></path><path d="M176 145V158" stroke="#697775" stroke-width="1"></path><path d="M198 145V158" stroke="#697775" stroke-width="1"></path><path d="M220 145V158" stroke="#697775" stroke-width="1"></path><path d="M242 145V158" stroke="#697775" stroke-width="1"></path><path d="M264 145V158" stroke="#697775" stroke-width="1"></path><path d="M286 145V158" stroke="#697775" stroke-width="1"></path><path d="M308 145V158" stroke="#697775" stroke-width="1"></path><path d="M330 145V158" stroke="#697775" stroke-width="1"></path><path d="M352 145V158" stroke="#697775" stroke-width="1"></path><path d="M374 145V158" stroke="#697775" stroke-width="1"></path><path d="M396 145V158" stroke="#697775" stroke-width="1"></path><path d="M418 145V158" stroke="#697775" stroke-width="1"></path><path d="M148 179H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 164V177" stroke="#697775" stroke-width="1"></path><path d="M176 164V177" stroke="#697775" stroke-width="1"></path><path d="M198 164V177" stroke="#697775" stroke-width="1"></path><path d="M220 164V177" stroke="#697775" stroke-width="1"></path><path d="M242 164V177" stroke="#697775" stroke-width="1"></path><path d="M264 164V177" stroke="#697775" stroke-width="1"></path><path d="M286 164V177" stroke="#697775" stroke-width="1"></path><path d="M308 164V177" stroke="#697775" stroke-width="1"></path><path d="M330 164V177" stroke="#697775" stroke-width="1"></path><path d="M352 164V177" stroke="#697775" stroke-width="1"></path><path d="M374 164V177" stroke="#697775" stroke-width="1"></path><path d="M396 164V177" stroke="#697775" stroke-width="1"></path><path d="M418 164V177" stroke="#697775" stroke-width="1"></path><path d="M148 198H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 183V196" stroke="#697775" stroke-width="1"></path><path d="M176 183V196" stroke="#697775" stroke-width="1"></path><path d="M198 183V196" stroke="#697775" stroke-width="1"></path><path d="M220 183V196" stroke="#697775" stroke-width="1"></path><path d="M242 183V196" stroke="#697775" stroke-width="1"></path><path d="M264 183V196" stroke="#697775" stroke-width="1"></path><path d="M286 183V196" stroke="#697775" stroke-width="1"></path><path d="M308 183V196" stroke="#697775" stroke-width="1"></path><path d="M330 183V196" stroke="#697775" stroke-width="1"></path><path d="M352 183V196" stroke="#697775" stroke-width="1"></path><path d="M374 183V196" stroke="#697775" stroke-width="1"></path><path d="M396 183V196" stroke="#697775" stroke-width="1"></path><path d="M418 183V196" stroke="#697775" stroke-width="1"></path><path d="M148 217H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 202V215" stroke="#697775" stroke-width="1"></path><path d="M176 202V215" stroke="#697775" stroke-width="1"></path><path d="M198 202V215" stroke="#697775" stroke-width="1"></path><path d="M220 202V215" stroke="#697775" stroke-width="1"></path><path d="M242 202V215" stroke="#697775" stroke-width="1"></path><path d="M264 202V215" stroke="#697775" stroke-width="1"></path><path d="M286 202V215" stroke="#697775" stroke-width="1"></path><path d="M308 202V215" stroke="#697775" stroke-width="1"></path><path d="M330 202V215" stroke="#697775" stroke-width="1"></path><path d="M352 202V215" stroke="#697775" stroke-width="1"></path><path d="M374 202V215" stroke="#697775" stroke-width="1"></path><path d="M396 202V215" stroke="#697775" stroke-width="1"></path><path d="M418 202V215" stroke="#697775" stroke-width="1"></path><path d="M148 236H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 221V234" stroke="#697775" stroke-width="1"></path><path d="M176 221V234" stroke="#697775" stroke-width="1"></path><path d="M198 221V234" stroke="#697775" stroke-width="1"></path><path d="M220 221V234" stroke="#697775" stroke-width="1"></path><path d="M242 221V234" stroke="#697775" stroke-width="1"></path><path d="M264 221V234" stroke="#697775" stroke-width="1"></path><path d="M286 221V234" stroke="#697775" stroke-width="1"></path><path d="M308 221V234" stroke="#697775" stroke-width="1"></path><path d="M330 221V234" stroke="#697775" stroke-width="1"></path><path d="M352 221V234" stroke="#697775" stroke-width="1"></path><path d="M374 221V234" stroke="#697775" stroke-width="1"></path><path d="M396 221V234" stroke="#697775" stroke-width="1"></path><path d="M418 221V234" stroke="#697775" stroke-width="1"></path><path d="M148 255H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 240V253" stroke="#697775" stroke-width="1"></path><path d="M176 240V253" stroke="#697775" stroke-width="1"></path><path d="M198 240V253" stroke="#697775" stroke-width="1"></path><path d="M220 240V253" stroke="#697775" stroke-width="1"></path><path d="M242 240V253" stroke="#697775" stroke-width="1"></path><path d="M264 240V253" stroke="#697775" stroke-width="1"></path><path d="M286 240V253" stroke="#697775" stroke-width="1"></path><path d="M308 240V253" stroke="#697775" stroke-width="1"></path><path d="M330 240V253" stroke="#697775" stroke-width="1"></path><path d="M352 240V253" stroke="#697775" stroke-width="1"></path><path d="M374 240V253" stroke="#697775" stroke-width="1"></path><path d="M396 240V253" stroke="#697775" stroke-width="1"></path><path d="M418 240V253" stroke="#697775" stroke-width="1"></path><path d="M148 274H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 259V272" stroke="#697775" stroke-width="1"></path><path d="M176 259V272" stroke="#697775" stroke-width="1"></path><path d="M198 259V272" stroke="#697775" stroke-width="1"></path><path d="M220 259V272" stroke="#697775" stroke-width="1"></path><path d="M242 259V272" stroke="#697775" stroke-width="1"></path><path d="M264 259V272" stroke="#697775" stroke-width="1"></path><path d="M286 259V272" stroke="#697775" stroke-width="1"></path><path d="M308 259V272" stroke="#697775" stroke-width="1"></path><path d="M330 259V272" stroke="#697775" stroke-width="1"></path><path d="M352 259V272" stroke="#697775" stroke-width="1"></path><path d="M374 259V272" stroke="#697775" stroke-width="1"></path><path d="M396 259V272" stroke="#697775" stroke-width="1"></path><path d="M418 259V272" stroke="#697775" stroke-width="1"></path><path d="M148 293H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 278V291" stroke="#697775" stroke-width="1"></path><path d="M176 278V291" stroke="#697775" stroke-width="1"></path><path d="M198 278V291" stroke="#697775" stroke-width="1"></path><path d="M220 278V291" stroke="#697775" stroke-width="1"></path><path d="M242 278V291" stroke="#697775" stroke-width="1"></path><path d="M264 278V291" stroke="#697775" stroke-width="1"></path><path d="M286 278V291" stroke="#697775" stroke-width="1"></path><path d="M308 278V291" stroke="#697775" stroke-width="1"></path><path d="M330 278V291" stroke="#697775" stroke-width="1"></path><path d="M352 278V291" stroke="#697775" stroke-width="1"></path><path d="M374 278V291" stroke="#697775" stroke-width="1"></path><path d="M396 278V291" stroke="#697775" stroke-width="1"></path><path d="M418 278V291" stroke="#697775" stroke-width="1"></path><path d="M148 312H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 297V310" stroke="#697775" stroke-width="1"></path><path d="M176 297V310" stroke="#697775" stroke-width="1"></path><path d="M198 297V310" stroke="#697775" stroke-width="1"></path><path d="M220 297V310" stroke="#697775" stroke-width="1"></path><path d="M242 297V310" stroke="#697775" stroke-width="1"></path><path d="M264 297V310" stroke="#697775" stroke-width="1"></path><path d="M286 297V310" stroke="#697775" stroke-width="1"></path><path d="M308 297V310" stroke="#697775" stroke-width="1"></path><path d="M330 297V310" stroke="#697775" stroke-width="1"></path><path d="M352 297V310" stroke="#697775" stroke-width="1"></path><path d="M374 297V310" stroke="#697775" stroke-width="1"></path><path d="M396 297V310" stroke="#697775" stroke-width="1"></path><path d="M418 297V310" stroke="#697775" stroke-width="1"></path><path d="M148 331H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 316V329" stroke="#697775" stroke-width="1"></path><path d="M176 316V329" stroke="#697775" stroke-width="1"></path><path d="M198 316V329" stroke="#697775" stroke-width="1"></path><path d="M220 316V329" stroke="#697775" stroke-width="1"></path><path d="M242 316V329" stroke="#697775" stroke-width="1"></path><path d="M264 316V329" stroke="#697775" stroke-width="1"></path><path d="M286 316V329" stroke="#697775" stroke-width="1"></path><path d="M308 316V329" stroke="#697775" stroke-width="1"></path><path d="M330 316V329" stroke="#697775" stroke-width="1"></path><path d="M352 316V329" stroke="#697775" stroke-width="1"></path><path d="M374 316V329" stroke="#697775" stroke-width="1"></path><path d="M396 316V329" stroke="#697775" stroke-width="1"></path><path d="M418 316V329" stroke="#697775" stroke-width="1"></path><path d="M148 350H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 335V348" stroke="#697775" stroke-width="1"></path><path d="M176 335V348" stroke="#697775" stroke-width="1"></path><path d="M198 335V348" stroke="#697775" stroke-width="1"></path><path d="M220 335V348" stroke="#697775" stroke-width="1"></path><path d="M242 335V348" stroke="#697775" stroke-width="1"></path><path d="M264 335V348" stroke="#697775" stroke-width="1"></path><path d="M286 335V348" stroke="#697775" stroke-width="1"></path><path d="M308 335V348" stroke="#697775" stroke-width="1"></path><path d="M330 335V348" stroke="#697775" stroke-width="1"></path><path d="M352 335V348" stroke="#697775" stroke-width="1"></path><path d="M374 335V348" stroke="#697775" stroke-width="1"></path><path d="M396 335V348" stroke="#697775" stroke-width="1"></path><path d="M418 335V348" stroke="#697775" stroke-width="1"></path><path d="M148 369H422" stroke="#c8c7b0" stroke-width="3" opacity=".7"></path><path d="M154 354V367" stroke="#697775" stroke-width="1"></path><path d="M176 354V367" stroke="#697775" stroke-width="1"></path><path d="M198 354V367" stroke="#697775" stroke-width="1"></path><path d="M220 354V367" stroke="#697775" stroke-width="1"></path><path d="M242 354V367" stroke="#697775" stroke-width="1"></path><path d="M264 354V367" stroke="#697775" stroke-width="1"></path><path d="M286 354V367" stroke="#697775" stroke-width="1"></path><path d="M308 354V367" stroke="#697775" stroke-width="1"></path><path d="M330 354V367" stroke="#697775" stroke-width="1"></path><path d="M352 354V367" stroke="#697775" stroke-width="1"></path><path d="M374 354V367" stroke="#697775" stroke-width="1"></path><path d="M396 354V367" stroke="#697775" stroke-width="1"></path><path d="M418 354V367" stroke="#697775" stroke-width="1"></path><g stroke="#c8c7b0" fill="none" stroke-width="11">
+ <path d="M162 392V60M207 392V48M363 392V48M410 392V60"></path>
+ <path d="M162 85H410M162 170H410M162 262H410M162 349H410"></path>
+ <path d="M162 85L363 170L207 262L410 349M410 85L207 170L363 262L162 349"></path>
+ </g>
+ <rect x="199" y="39" width="173" height="18" rx="9" fill="#c8c7b0" stroke="#697775" stroke-width="2"></rect>
+ <path d="M177 396H395L416 383H155Z" fill="#c8c7b0"></path>
+ <rect x="243" y="351" width="87" height="43" fill="#547178" stroke="#c8c7b0" stroke-width="4"></rect>
+ <path d="M242 393L232 414M330 393L342 414" stroke="#c8c7b0" stroke-width="5"></path></g>
+       </g></svg></svg>
+          <span id="photoLabel" class="photo-label">建築 / 正面對稱</span>
+          <div id="gridOverlay" class="grid-overlay"></div>
+          <div class="level" aria-hidden="true"></div>
+          <span class="sim-label">教學插畫 · 非實拍</span>
+        </div>
+        <div class="preview-footer">
+          <label><input type="checkbox" id="grid" checked=""> 顯示格線</label>
+          <button class="text-button" id="resetLab">重設示範</button>
+        </div>
+        <p class="note">建築以你提供的滙豐總部教材為靈感，並非精確建築模型。光線、曝光與透視採簡化呈現；畫面不包含實際手機的感光元件、HDR 或鏡頭差異。</p>
+      </div>
+      <div class="controls">
+        <h3 id="controlTitle">先站好，再調相機。</h3>
+        <p class="intro" id="controlIntro">正面拍平衡、轉角拍體積、局部拍材質。同一棟建築，可以講三個故事。</p>
+        <div id="buildingControls">
+          <div class="control">
+            <label for="angle">取景方式</label>
+            <select id="angle">
+              <option value="front">正面對稱：門口與窗格左右平衡</option>
+              <option value="corner">轉角立體：呈現兩面外牆</option>
+              <option value="detail">局部細節：聚焦鋼構與玻璃</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="tilt">向上仰拍程度 <span id="tiltValue">低</span></label>
+            <input id="tilt" type="range" min="0" max="35" value="0">
+          </div>
+          <div class="control">
+            <label for="light">光線條件</label>
+            <select id="light">
+              <option value="gold">清晨／傍晚：側光增加立體感</option>
+              <option value="cloud">陰天：柔光呈現色彩與細節</option>
+              <option value="blue">日落後：天空仍藍、建築亮燈</option>
+              <option value="night">光線不足：穩定支撐、夜景模式</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="exposure">曝光調整 <span id="exposureValue">原值</span></label>
+            <input id="exposure" type="range" min="-40" max="25" value="0">
+          </div>
+        </div>
+        <div id="natureControls" hidden="">
+          <div class="control">
+            <label>比較方式</label>
+            <div class="control-buttons">
+              <button id="naturalButton" class="selected" aria-pressed="true">A 保留自然姿態</button>
+              <button id="forcedButton" aria-pressed="false">B 強行拉直景物</button>
+            </div>
+          </div>
+          <div class="control" id="treeViewControl" hidden="">
+            <label for="treeView">樹木取景</label>
+            <select id="treeView">
+              <option value="whole">整棵樹：退遠，減少仰拍</option>
+              <option value="up">仰拍：刻意呈現向上匯聚</option>
+              <option value="reflection">湖邊倒影：樹與倒影一起入鏡</option>
+            </select>
+          </div>
+        </div>
+        <div class="tip" id="labTip" aria-live="polite">先用 1×；拍不下先安全退後。點按建築後稍降曝光，但不要壓黑全部。少量後製可能改善透視，卻不能保證救回已失去的亮部細節。</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="talk" class="section">
+    <div class="section-heading">
+      <div><div class="eyebrow">02 / Five-minute speech</div><h2>五分鐘，把取景說清楚。</h2></div>
+      <p>以預先拍好的比較照片或本站示意演講。現場拍攝與討論請另預留 10–15 分鐘。</p>
+    </div>
+    <div class="lesson">
+      <aside class="timer">
+        <div class="timer-label"><span>REHEARSAL TIMER</span><span>總長 5 分鐘</span></div>
+        <div class="timer-digits"><span id="clock">00:00</span> <small>/ 05:00</small></div>
+        <div class="track"><div id="progress" class="fill" style="width: 0%;"></div></div>
+        <div id="currentSection" class="current-section" aria-live="polite">準備好，從觀察開始。</div>
+        <div class="actions">
+          <button class="btn primary" id="start">▶ 開始</button>
+          <button class="btn" id="resetTimer">↺ 重設</button>
+        </div>
+        <p>每段時間包含短暫展示圖片與觀察。請先排練，依自己的語速調整停頓；計時器不會自動朗讀。</p>
+      </aside>
+      <div>
+        <div class="script-tools">
+          <button class="text-button" id="expand">展開全部講稿</button>
+          <button class="text-button" id="print">列印講稿</button>
+        </div>
+        <div id="scripts">
+<details id="segment-0" open="">
+ <summary><span class="time-tag">00:00–00:35</span><span>開場｜拍照不是把所有線拉直</span></summary>
+ <div class="script-body"><p>大家好！今天我們用手機拍三種主題：建築、山和大樹。以香港滙豐總部的鋼構，以及流水響風格的山林作例子。先記一個口訣：一倍、退後、拿直、稍降曝光。拿直，是避免手機不小心歪斜；不是要把所有山坡和樹幹都拉直。今天的網站圖片是教學示意；真正的實測，要看我們現場拍出的比較照片。</p><div class="stage">展示提示｜展示建築、山林示意。說明：沒有實拍照片時，不把示意稱為實測成果。</div></div>
+</details>
+<details id="segment-1">
+ <summary><span class="time-tag">00:35–01:40</span><span>站位與角度｜先用 1×，先退後</span></summary>
+ <div class="script-body"><p>先看建築。通常先用一倍主鏡頭，畫質和觀感比較穩妥。拍不完整，先確認背後安全，再退遠，不急著切零點五倍。超廣角在狹窄街道很有用，但重要柱子別放在最邊緣，避免拉伸。第一組實測，我們站在同一位置，用一倍拍 A：手機明顯向上仰。再拍 B：降低仰角，看看兩側直線是否仍向上匯聚。這一步只測角度，不要求兩張都拍完整。若要改善完整度，再安全退後，拍第三張。左右歪斜可以靠格線與水平儀檢查；上窄下寬則是仰拍透視，兩者不是一回事。拍不下時，也可在安全位置提高機位，或橫拍保留環境，不必冒險追求全棟。</p><div class="stage">展示提示｜展示仰拍 A / B，先比較牆角的匯聚，再展示安全退後的完整取景。預留短暫觀察時間。</div></div>
+</details>
+<details id="segment-2">
+ <summary><span class="time-tag">01:40–02:35</span><span>光線與曝光｜保住亮部，不壓黑全部</span></summary>
+ <div class="script-body"><p>第二組實測是曝光。固定站位與一倍鏡頭，點按建築對焦，先用相機自動曝光拍 A，再稍微降低曝光拍 B。放大看白色鋼構、天空和玻璃：B 有沒有保住更多亮部層次？暗處是否又太黑？不要只因為照片變暗，就說它更好。清晨、傍晚的側光能帶出鋼構立體感；陰天適合看外牆色彩與細節。日落後，天空仍藍時，建築燈光與天空較容易平衡。光線不足就雙手握穩，找安全支撐，開夜景模式後等它拍完再移動。不同時段比較，會受天氣與亮燈安排影響，不能當成只改一個因素的嚴格測試。</p><div class="stage">展示提示｜展示曝光 A / B，指向同一處亮部與陰影。四種光線圖片若是模擬，要明確標示。</div></div>
+</details>
+<details id="segment-3">
+ <summary><span class="time-tag">02:35–03:30</span><span>三種拍法與修正｜同一棟，三個故事</span></summary>
+ <div class="script-body"><p>第三個練習，是同一棟建築拍三張。第一張正面對稱，在安全位置對準中央，讓入口與窗格左右平衡。第二張轉角立體，從斜向位置讓兩面外牆入鏡。第三張局部細節，只拍鋼構、玻璃接點或光影，不必每次拍全棟。有真正的長焦鏡頭，可以試拍窗格；少用手指放大，數碼放大不等於更多細節。拍完只做少量修正：拉直、適度校正垂直透視、降低亮部、稍提陰影，再裁掉邊緣雜物。實測時保留原圖，另存修正版，比較柱子是否更端正，也檢查頂部是否被裁掉。現場四周留一點空間，因為透視校正會犧牲部分畫面；已經過曝成純白的地方，也未必救得回來。</p><div class="stage">展示提示｜展示正面、轉角、細節三張；再展示一組原圖與修正版，圈出裁切損失。</div></div>
+</details>
+<details id="segment-4">
+ <summary><span class="time-tag">03:30–04:30</span><span>山與大樹｜保留自然的方向</span></summary>
+ <div class="script-body"><p>最後看山和大樹。山脊有起伏，不能當水平線；湖岸線也未必水平。有遠方海平線可以參考，沒有就先用手機水平儀。第四組實測，拍 A：水平儀歸零，保留左低右高的山坡。再把 A 複製一份，旋轉成 B，硬把某一段山脊拉平，看看其他景物是否反而變歪。樹也可能自然傾斜，拍森林要看整體，不只看一棵。拍整棵樹，安全退遠、減少仰角；刻意仰拍時，枝幹向上匯聚很正常。超廣角把重要樹幹放近中央。湖邊可保留樹與倒影；小徑能引導視線；逆光葉片則先找簡潔背景，再試曝光。不摘葉，不踩樹根。拍不完整，也可以只拍樹皮、枝葉或一座山峰。</p><div class="stage">展示提示｜切換山景 A / B，辨認自然坡度。展示整棵樹、仰拍與倒影示意；不把傾斜樹幹當校正基準。</div></div>
+</details>
+<details id="segment-5">
+ <summary><span class="time-tag">04:30–05:00</span><span>結語｜用比較取代猜測</span></summary>
+ <div class="script-body"><p>今天的重點，是每次先拍一張，再只改一個因素，看差別出在哪裡。比較清晰度、亮部細節、線條方向和畫面完整度，而不是一律選更暗、更直的照片。最後一起記：一倍、退後、拿直、稍降曝光。山保留坡度，樹保留姿態；水平儀用來校正手機，不是把大自然全部拉直。先照顧安全與環境，再帶走一張有想法的照片。謝謝大家！</p><div class="stage">展示提示｜帶觀眾重複口訣。五分鐘到，實地練習另行開始。</div></div>
+</details></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tests" class="section">
+    <div class="section-heading">
+      <div><div class="eyebrow">03 / Field experiments</div><h2>不要只說「比較好」，拍下證據。</h2></div>
+      <p>以下是可執行的實測例子，不是已完成的測試報告。每次盡量只改一項條件，保留原圖。</p>
+    </div>
+    <div class="demo-grid" id="demoGrid">
+<article class="demo">
+ <div class="demo-number">TEST / 01</div><h3>仰拍角度</h3>
+ <p><strong>準備：</strong>同一安全站位、1×，選牆角清楚的建築。</p><p><strong>操作：</strong>A：明顯仰拍。B：降低仰角，其他條件盡量不變。另拍 C：安全退後，嘗試完整取景。</p>
+ <p class="observe"><strong>觀察：</strong>A / B 看垂直線匯聚；B / C 看完整度。退後與角度的影響分開記錄。</p>
+ <label><input type="checkbox"> 已拍攝並完成比較</label>
+</article>
+<article class="demo">
+ <div class="demo-number">TEST / 02</div><h3>亮部與曝光</h3>
+ <p><strong>準備：</strong>固定站位、鏡頭與構圖；若支援，鎖定對焦，避免光線快速改變。</p><p><strong>操作：</strong>A：自動曝光。B：適度降低曝光。保留未編輯原圖，不套濾鏡。</p>
+ <p class="observe"><strong>觀察：</strong>放大天空、白色外牆及陰影。亮部更完整但陰影過黑，不一定是改善。</p>
+ <label><input type="checkbox"> 已拍攝並完成比較</label>
+</article>
+<article class="demo">
+ <div class="demo-number">TEST / 03</div><h3>同棟三種構圖</h3>
+ <p><strong>準備：</strong>以滙豐總部或另一棟可安全拍攝的建築為主題。</p><p><strong>操作：</strong>用 1× 分別拍正面、轉角及細節。拍細節可以走近；有真長焦也可另做測試。</p>
+ <p class="observe"><strong>觀察：</strong>哪張表現秩序、哪張表現體積、哪張表現材質？這是創作比較，沒有唯一勝者。</p>
+ <label><input type="checkbox"> 已拍攝並完成比較</label>
+</article>
+<article class="demo">
+ <div class="demo-number">TEST / 04</div><h3>山脊不是水平線</h3>
+ <p><strong>準備：</strong>選一段自然左低右高的山坡；先用手機水平儀。</p><p><strong>操作：</strong>A：保持手機水平拍攝。複製 A，旋轉成 B，刻意把選定山脊線段拉平。</p>
+ <p class="observe"><strong>觀察：</strong>比較整體方向與旋轉裁切。注意山脊不是校正基準；這組示範測的是旋轉處理。</p>
+ <label><input type="checkbox"> 已拍攝並完成比較</label>
+</article>
+<article class="demo">
+ <div class="demo-number">TEST / 05</div><h3>自然樹姿與仰拍</h3>
+ <p><strong>準備：</strong>選一棵自然傾斜的大樹，留在步道，確認可安全取景。</p><p><strong>操作：</strong>先用水平儀拍整樹 A；複製並強行旋直樹幹成 B。另拍向上取景 C，觀察匯聚。</p>
+ <p class="observe"><strong>觀察：</strong>A / B 看樹姿是否被誤判。C 看透視與氣勢，不把刻意仰拍視作拍攝失誤。</p>
+ <label><input type="checkbox"> 已拍攝並完成比較</label>
+</article>
+<article class="demo">
+ <div class="demo-number">TEST / 06</div><h3>少量後製</h3>
+ <p><strong>準備：</strong>挑一張四周有留空間的建築原圖，另存編輯版本。</p><p><strong>操作：</strong>先只校正透視，記錄裁切。再另存一版調亮部與陰影，最後才裁雜物。</p>
+ <p class="observe"><strong>觀察：</strong>逐步比較線條、天空與噪點。亮部已截斷或陰影噪點太多時，調整未必能挽救。</p>
+ <label><input type="checkbox"> 已拍攝並完成比較</label>
+</article></div>
+    <div class="safety">
+      <div>
+        <h3>站位比照片更重要。</h3>
+        <p>拍滙豐總部時，選合法、安全且不阻路的公共位置；不要為了正面對稱站上車道。退後前先看路況，不攀爬、不進入受限制區域。人物入鏡時，尊重私隱，避免公開可辨識的陌生人特寫。</p>
+      </div>
+      <div>
+        <h3>森林不是攝影佈景。</h3>
+        <p>在流水響風格的山林練習時，留在開放步道，不踏樹根、不摘葉、不涉水追倒影。靠安全支撐穩定手機，不為仰拍走入危險位置。出發前另查天氣、開放及交通資訊。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="publish" class="section">
+    <div class="publish">
+      <div>
+        <h3>把這堂課，變成公開網站。</h3>
+        <p>本頁可下載為獨立 HTML。放入資料夾並命名為 index.html，再透過 Netlify 手動部署，或提交至 GitHub Pages。<br>目前預覽不代表已取得公開網址；下載與列印若被預覽環境阻擋，請複製完整原始碼到本機操作。</p>
+      </div>
+      <button class="btn primary" id="download">↓ 下載網站 HTML</button>
+    </div>
+    <p class="note" id="downloadStatus" role="status"></p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>取景之前 / 手機攝影分享課</span>
+    <span>插畫非實地照片 · 實測需自行執行 · 非滙豐或郊野公園官方網站</span>
+  </div>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const segments = [
+  {
+    start:0,end:35,title:"開場｜拍照不是把所有線拉直",
+    text:"大家好！今天我們用手機拍三種主題：建築、山和大樹。以香港滙豐總部的鋼構，以及流水響風格的山林作例子。先記一個口訣：一倍、退後、拿直、稍降曝光。拿直，是避免手機不小心歪斜；不是要把所有山坡和樹幹都拉直。今天的網站圖片是教學示意；真正的實測，要看我們現場拍出的比較照片。",
+    stage:"展示建築、山林示意。說明：沒有實拍照片時，不把示意稱為實測成果。"
+  },
+  {
+    start:35,end:100,title:"站位與角度｜先用 1×，先退後",
+    text:"先看建築。通常先用一倍主鏡頭，畫質和觀感比較穩妥。拍不完整，先確認背後安全，再退遠，不急著切零點五倍。超廣角在狹窄街道很有用，但重要柱子別放在最邊緣，避免拉伸。第一組實測，我們站在同一位置，用一倍拍 A：手機明顯向上仰。再拍 B：降低仰角，看看兩側直線是否仍向上匯聚。這一步只測角度，不要求兩張都拍完整。若要改善完整度，再安全退後，拍第三張。左右歪斜可以靠格線與水平儀檢查；上窄下寬則是仰拍透視，兩者不是一回事。拍不下時，也可在安全位置提高機位，或橫拍保留環境，不必冒險追求全棟。",
+    stage:"展示仰拍 A / B，先比較牆角的匯聚，再展示安全退後的完整取景。預留短暫觀察時間。"
+  },
+  {
+    start:100,end:155,title:"光線與曝光｜保住亮部，不壓黑全部",
+    text:"第二組實測是曝光。固定站位與一倍鏡頭，點按建築對焦，先用相機自動曝光拍 A，再稍微降低曝光拍 B。放大看白色鋼構、天空和玻璃：B 有沒有保住更多亮部層次？暗處是否又太黑？不要只因為照片變暗，就說它更好。清晨、傍晚的側光能帶出鋼構立體感；陰天適合看外牆色彩與細節。日落後，天空仍藍時，建築燈光與天空較容易平衡。光線不足就雙手握穩，找安全支撐，開夜景模式後等它拍完再移動。不同時段比較，會受天氣與亮燈安排影響，不能當成只改一個因素的嚴格測試。",
+    stage:"展示曝光 A / B，指向同一處亮部與陰影。四種光線圖片若是模擬，要明確標示。"
+  },
+  {
+    start:155,end:210,title:"三種拍法與修正｜同一棟，三個故事",
+    text:"第三個練習，是同一棟建築拍三張。第一張正面對稱，在安全位置對準中央，讓入口與窗格左右平衡。第二張轉角立體，從斜向位置讓兩面外牆入鏡。第三張局部細節，只拍鋼構、玻璃接點或光影，不必每次拍全棟。有真正的長焦鏡頭，可以試拍窗格；少用手指放大，數碼放大不等於更多細節。拍完只做少量修正：拉直、適度校正垂直透視、降低亮部、稍提陰影，再裁掉邊緣雜物。實測時保留原圖，另存修正版，比較柱子是否更端正，也檢查頂部是否被裁掉。現場四周留一點空間，因為透視校正會犧牲部分畫面；已經過曝成純白的地方，也未必救得回來。",
+    stage:"展示正面、轉角、細節三張；再展示一組原圖與修正版，圈出裁切損失。"
+  },
+  {
+    start:210,end:270,title:"山與大樹｜保留自然的方向",
+    text:"最後看山和大樹。山脊有起伏，不能當水平線；湖岸線也未必水平。有遠方海平線可以參考，沒有就先用手機水平儀。第四組實測，拍 A：水平儀歸零，保留左低右高的山坡。再把 A 複製一份，旋轉成 B，硬把某一段山脊拉平，看看其他景物是否反而變歪。樹也可能自然傾斜，拍森林要看整體，不只看一棵。拍整棵樹，安全退遠、減少仰角；刻意仰拍時，枝幹向上匯聚很正常。超廣角把重要樹幹放近中央。湖邊可保留樹與倒影；小徑能引導視線；逆光葉片則先找簡潔背景，再試曝光。不摘葉，不踩樹根。拍不完整，也可以只拍樹皮、枝葉或一座山峰。",
+    stage:"切換山景 A / B，辨認自然坡度。展示整棵樹、仰拍與倒影示意；不把傾斜樹幹當校正基準。"
+  },
+  {
+    start:270,end:300,title:"結語｜用比較取代猜測",
+    text:"今天的重點，是每次先拍一張，再只改一個因素，看差別出在哪裡。比較清晰度、亮部細節、線條方向和畫面完整度，而不是一律選更暗、更直的照片。最後一起記：一倍、退後、拿直、稍降曝光。山保留坡度，樹保留姿態；水平儀用來校正手機，不是把大自然全部拉直。先照顧安全與環境，再帶走一張有想法的照片。謝謝大家！",
+    stage:"帶觀眾重複口訣。五分鐘到，實地練習另行開始。"
+  }
+];
+
+const tests = [
+  {title:"仰拍角度",setup:"同一安全站位、1×，選牆角清楚的建築。",
+   action:"A：明顯仰拍。B：降低仰角，其他條件盡量不變。另拍 C：安全退後，嘗試完整取景。",
+   observe:"A / B 看垂直線匯聚；B / C 看完整度。退後與角度的影響分開記錄。"},
+  {title:"亮部與曝光",setup:"固定站位、鏡頭與構圖；若支援，鎖定對焦，避免光線快速改變。",
+   action:"A：自動曝光。B：適度降低曝光。保留未編輯原圖，不套濾鏡。",
+   observe:"放大天空、白色外牆及陰影。亮部更完整但陰影過黑，不一定是改善。"},
+  {title:"同棟三種構圖",setup:"以滙豐總部或另一棟可安全拍攝的建築為主題。",
+   action:"用 1× 分別拍正面、轉角及細節。拍細節可以走近；有真長焦也可另做測試。",
+   observe:"哪張表現秩序、哪張表現體積、哪張表現材質？這是創作比較，沒有唯一勝者。"},
+  {title:"山脊不是水平線",setup:"選一段自然左低右高的山坡；先用手機水平儀。",
+   action:"A：保持手機水平拍攝。複製 A，旋轉成 B，刻意把選定山脊線段拉平。",
+   observe:"比較整體方向與旋轉裁切。注意山脊不是校正基準；這組示範測的是旋轉處理。"},
+  {title:"自然樹姿與仰拍",setup:"選一棵自然傾斜的大樹，留在步道，確認可安全取景。",
+   action:"先用水平儀拍整樹 A；複製並強行旋直樹幹成 B。另拍向上取景 C，觀察匯聚。",
+   observe:"A / B 看樹姿是否被誤判。C 看透視與氣勢，不把刻意仰拍視作拍攝失誤。"},
+  {title:"少量後製",setup:"挑一張四周有留空間的建築原圖，另存編輯版本。",
+   action:"先只校正透視，記錄裁切。再另存一版調亮部與陰影，最後才裁雜物。",
+   observe:"逐步比較線條、天空與噪點。亮部已截斷或陰影噪點太多時，調整未必能挽救。"}
+];
+
+function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+$("scripts").innerHTML=segments.map((s,i)=>`
+<details id="segment-${i}" ${i===0?"open":""}>
+ <summary><span class="time-tag">${fmt(s.start)}–${fmt(s.end)}</span><span>${s.title}</span></summary>
+ <div class="script-body"><p>${s.text}</p><div class="stage">展示提示｜${s.stage}</div></div>
+</details>`).join("");
+$("demoGrid").innerHTML=tests.map((t,i)=>`
+<article class="demo">
+ <div class="demo-number">TEST / 0${i+1}</div><h3>${t.title}</h3>
+ <p><strong>準備：</strong>${t.setup}</p><p><strong>操作：</strong>${t.action}</p>
+ <p class="observe"><strong>觀察：</strong>${t.observe}</p>
+ <label><input type="checkbox"> 已拍攝並完成比較</label>
+</article>`).join("");
+
+let elapsed=0,running=false,interval=null,origin=0,lastSegment=-1;
+function updateTimer(){
+ $("clock").textContent=fmt(elapsed);
+ $("progress").style.width=(elapsed/300*100)+"%";
+ let i=segments.findIndex(s=>elapsed>=s.start&&elapsed<s.end);
+ document.querySelectorAll("#scripts details").forEach(d=>d.classList.remove("current"));
+ if(elapsed>=300){
+   $("currentSection").textContent="五分鐘完成。接下來，把方法帶到現場。";
+ }else if(elapsed===0&&!running){
+   $("currentSection").textContent="準備好，從觀察開始。";
+ }else{
+   $("currentSection").textContent=segments[i].title;
+   $("segment-"+i).classList.add("current");
+   if(running&&i!==lastSegment){$("segment-"+i).open=true;lastSegment=i}
+ }
+ $("start").textContent=running?"Ⅱ 暫停":elapsed===300?"▶ 再練一次":"▶ 開始";
+}
+function stop(){running=false;clearInterval(interval);interval=null}
+$("start").onclick=()=>{
+ if(running){stop();updateTimer();return}
+ if(elapsed===300){elapsed=0;lastSegment=-1}
+ running=true;origin=performance.now()-elapsed*1000;updateTimer();
+ interval=setInterval(()=>{
+   elapsed=Math.min(300,Math.floor((performance.now()-origin)/1000));
+   if(elapsed===300)stop();
+   updateTimer();
+ },200);
+};
+$("resetTimer").onclick=()=>{stop();elapsed=0;lastSegment=-1;updateTimer()};
+let expanded=false;
+$("expand").onclick=()=>{
+ expanded=!expanded;
+ document.querySelectorAll("#scripts details").forEach(d=>d.open=expanded);
+ $("expand").textContent=expanded?"收合全部講稿":"展開全部講稿";
+};
+window.addEventListener("beforeprint",()=>{
+ document.querySelectorAll("#scripts details").forEach(d=>d.open=true);
+});
+$("print").onclick=()=>{
+ document.querySelectorAll("#scripts details").forEach(d=>d.open=true);
+ window.print();
+};
+
+let topic="building",forced=false;
+const palettes={
+ gold:{sky:"#d7e1dc",wall:"#c8c7b0",glass:"#547178",edge:"#697775",ground:"#b6b6a0"},
+ cloud:{sky:"#d9dcda",wall:"#c6cdcc",glass:"#6b8187",edge:"#737f83",ground:"#bdc2b6"},
+ blue:{sky:"#607d96",wall:"#899ba3",glass:"#374f68",edge:"#b5b8aa",ground:"#54665b"},
+ night:{sky:"#202e3a",wall:"#657176",glass:"#203e46",edge:"#8d9690",ground:"#344438"}
+};
+function facade(p){
+ let s=`<rect x="143" y="84" width="284" height="303" fill="${p.glass}" stroke="${p.edge}" stroke-width="2"/>`;
+ for(let y=103;y<375;y+=19){
+   s+=`<path d="M148 ${y}H422" stroke="${p.wall}" stroke-width="3" opacity=".7"/>`;
+   for(let x=154;x<420;x+=22){
+     s+=`<path d="M${x} ${y-15}V${y-2}" stroke="${p.edge}" stroke-width="1"/>`;
+     if(($("light").value==="blue"||$("light").value==="night")&&(x+y)%5<2)
+       s+=`<rect x="${x+2}" y="${y-13}" width="13" height="9" fill="#ecdca4" opacity=".7"/>`;
+   }
+ }
+ s+=`<g stroke="${p.wall}" fill="none" stroke-width="11">
+ <path d="M162 392V60M207 392V48M363 392V48M410 392V60"/>
+ <path d="M162 85H410M162 170H410M162 262H410M162 349H410"/>
+ <path d="M162 85L363 170L207 262L410 349M410 85L207 170L363 262L162 349"/>
+ </g>
+ <rect x="199" y="39" width="173" height="18" rx="9" fill="${p.wall}" stroke="${p.edge}" stroke-width="2"/>
+ <path d="M177 396H395L416 383H155Z" fill="${p.wall}"/>
+ <rect x="243" y="351" width="87" height="43" fill="${p.glass}" stroke="${p.wall}" stroke-width="4"/>
+ <path d="M242 393L232 414M330 393L342 414" stroke="${p.wall}" stroke-width="5"/>`;
+ return s;
+}
+function treeShape(){
+ return `<path d="M295 283Q292 234 319 177L323 148" stroke="#685b43" stroke-width="16" fill="none"/>
+ <path d="M308 215L267 179M316 185L358 156M318 172L298 133" stroke="#685b43" stroke-width="7" fill="none"/>
+ <g fill="#698151"><circle cx="318" cy="128" r="47"/><circle cx="272" cy="160" r="38"/><circle cx="359" cy="152" r="39"/><circle cx="298" cy="102" r="31"/></g>`;
+}
+function render(){
+ $("buildingControls").hidden=topic!=="building";
+ $("natureControls").hidden=topic==="building";
+ $("treeViewControl").hidden=topic!=="tree";
+ $("naturalButton").classList.toggle("selected",!forced);
+ $("forcedButton").classList.toggle("selected",forced);
+ $("naturalButton").setAttribute("aria-pressed",String(!forced));
+ $("forcedButton").setAttribute("aria-pressed",String(forced));
+ let content="";
+ if(topic==="building"){
+   const p=palettes[$("light").value],tilt=Number($("tilt").value),exp=Number($("exposure").value),angle=$("angle").value;
+   $("controlTitle").textContent="先站好，再調相機。";
+   $("controlIntro").textContent="正面拍平衡、轉角拍體積、局部拍材質。同一棟建築，可以講三個故事。";
+   $("photoLabel").textContent="建築 / "+({front:"正面對稱",corner:"轉角立體",detail:"局部細節"}[angle]);
+   $("tiltValue").textContent=tilt===0?"低":tilt<18?"中":"高";
+   $("exposureValue").textContent=exp===0?"原值":exp<0?"降低":"提高";
+   const topLeft=75+tilt*1.8,topRight=525-tilt*1.8;
+   content=`<defs><clipPath id="faceClip"><rect x="0" y="0" width="600" height="450"/></clipPath></defs>
+   <rect width="600" height="450" fill="${p.sky}"/>
+   <path d="M0 317L62 264L130 290L219 240L335 276L442 232L600 302V450H0Z" fill="#7e9383" opacity=".42"/>
+   <rect y="405" width="600" height="45" fill="${p.ground}"/>`;
+   if(angle==="detail"){
+     content+=`<g clip-path="url(#faceClip)"><g transform="translate(-420 -80) scale(2.5)">${facade(p)}</g></g>`;
+   }else{
+     if(angle==="corner"){
+       content+=`<path d="M389 76L486 117V389L389 420Z" fill="${p.glass}" stroke="${p.wall}" stroke-width="6"/>
+       <path d="M419 92V411M455 104V400M389 168L485 191M389 266L485 271M389 355L485 350" stroke="${p.wall}" stroke-width="5"/>`;
+     }
+     content+=`<svg x="${angle==="corner"?-28:0}" y="0" width="600" height="420" viewBox="0 0 600 420">
+       <defs><clipPath id="perspectiveClip"><polygon points="${topLeft},28 ${topRight},28 550,415 50,415"/></clipPath></defs>
+       <g clip-path="url(#perspectiveClip)">
+        <g transform="translate(${tilt*1.5} 0) scale(${1-tilt/200} 1)">${facade(p)}</g>
+       </g></svg>`;
+   }
+   if(exp<0)content+=`<rect width="600" height="450" fill="#152a31" opacity="${Math.abs(exp)/150}"/>`;
+   if(exp>0)content+=`<rect width="600" height="450" fill="#fffde7" opacity="${exp/75}"/>`;
+   $("labTip").textContent=tilt>17?
+     "仰拍會造成線條向上匯聚。這裡只是簡化示意，格線不能消除透視。試著降低仰角，再到現場安全退後比較；若要表現高聳，也可刻意保留匯聚。":
+     $("light").value==="night"?
+     "夜拍先穩定手機。夜景模式可能需要多幀合成，等拍攝完成再移動。實際亮部是否過曝，請放大照片確認，不依示意曝光滑桿判定。":
+     "先用 1×；拍不下先安全退後。點按建築後稍降曝光，但不要壓黑全部。少量後製可能改善透視，卻不能保證救回已失去的亮部細節。";
+ }else if(topic==="mountain"){
+   $("controlTitle").textContent="山坡，本來就有坡度。";
+   $("controlIntro").textContent="不要把山脊當水平線。先校正手機左右傾斜，再看整張照片是否自然。";
+   $("photoLabel").textContent=forced?"B / 強行把選定山脊拉平":"A / 保留自然坡度";
+   content=`<rect width="600" height="450" fill="#d5e2e0"/>
+   <g transform="rotate(${forced?27:0} 300 225)">
+     <rect x="-300" y="-300" width="1200" height="1000" fill="#d5e2e0"/>
+     <path d="M-200 185H850V650H-200Z" fill="#9bb8b9"/>
+     <path d="M-200 300L0 230L100 305L228 206L305 261L430 171L600 268L850 200V650H-200Z" fill="#779589"/>
+     <path d="M-200 450L100 330L435 158L660 236L850 185V650H-200Z" fill="#4d7560"/>
+     <path d="M100 330L435 158" stroke="#d8d6ad" stroke-width="4" stroke-dasharray="8 7"/>
+     <path d="M-200 414H850" stroke="#d1ded6" stroke-width="2"/>
+   </g>`;
+   $("labTip").textContent=forced?
+     "被標示的山脊線段變平了，但整體方向跟著旋轉。這是故意誤用旋轉的示意，不代表現場每張照片都會出現同樣效果。":
+     "保留左低右高的山坡。遠方海平線可作參考；湖岸線可能斜向延伸，不能一概當水平。沒有可靠參照時，先用手機水平儀。";
+ }else{
+   const treeView=$("treeView").value;
+   $("controlTitle").textContent="樹的姿態，不是誤差。";
+   $("controlIntro").textContent="自然傾斜與仰拍透視是兩回事。不要只靠其中一棵樹，判斷整片森林是否歪斜。";
+   $("photoLabel").textContent=forced?"B / 強行旋直樹幹":"A / 保留樹姿與透視";
+   content=`<rect width="600" height="450" fill="#d5dfce"/>
+   <g transform="rotate(${forced?-15:0} 300 225)">
+    <rect x="-200" y="-200" width="1000" height="900" fill="#d5dfce"/>
+    <path d="M-150 250Q75 133 214 208T520 180T750 230V650H-150Z" fill="#81957a"/>
+    <path d="M-150 279Q125 232 300 266T750 256V650H-150Z" fill="#566c4e"/>`;
+   if(treeView==="up"){
+     content+=`<rect x="-200" y="-200" width="1000" height="900" fill="#ccd8bc"/>`;
+     for(let i=0;i<18;i++)
+       content+=`<circle cx="${(i*107)%640}" cy="${(i*67)%390}" r="${42+(i%3)*13}" fill="${i%2?"#728b55":"#536f45"}" opacity=".85"/>`;
+     content+=`<path d="M174 500L294 143H315L432 500Z" fill="#76644a"/>
+     <path d="M300 175L149 69M302 200L471 61M303 148L326 -25M275 257L55 167M324 263L550 175" fill="none" stroke="#6a593f" stroke-width="19"/>`;
+   }else if(treeView==="reflection"){
+     content+=`<rect x="-200" y="282" width="1000" height="420" fill="#78938a"/>
+      ${treeShape()}
+      <g transform="translate(0 564) scale(1 -1)" opacity=".35">${treeShape()}</g>
+      <path d="M-200 282H800" stroke="#b6b18c" stroke-width="5"/>`;
+   }else{
+     content+=`<path d="M-200 365H800V650H-200Z" fill="#b4b996"/>
+     <path d="M244 460Q350 390 340 325L325 315Q317 385 157 460Z" fill="#d0c4a1"/>
+     <g transform="translate(-15 0) scale(1.16)">${treeShape()}</g>`;
+   }
+   content+="</g>";
+   $("labTip").textContent=treeView==="up"?
+     "仰拍時枝幹向上匯聚是正常透視，可把樹冠置中表現高度。留在安全步道，不為取景踏入樹根範圍。":
+     treeView==="reflection"?
+     "把樹與倒影一起放進畫面。水面平靜時可以用對稱構圖；有風時效果會改變。不要把湖岸線自動當成水平基準。":
+     forced?"強行把這棵斜樹旋直，會讓其他景物跟著轉動。實地判斷請看多棵樹、可靠參考物與手機水平儀。":
+     "整棵樹拍不下，先安全退遠；超廣角時讓重要樹幹靠中央。小徑可引導視線；逆光葉片先找簡潔背景，不必強求手機能拍出背景模糊。";
+ }
+ $("scene").innerHTML=content;
+}
+document.querySelectorAll("[data-topic]").forEach(button=>{
+ button.onclick=()=>{
+  topic=button.dataset.topic;forced=false;
+  document.querySelectorAll("[data-topic]").forEach(b=>{
+   const on=b===button;b.classList.toggle("active",on);b.setAttribute("aria-pressed",String(on));
+  });
+  render();
+ };
+});
+["angle","tilt","light","exposure","treeView"].forEach(id=>$(id).addEventListener("input",render));
+$("naturalButton").onclick=()=>{forced=false;render()};
+$("forcedButton").onclick=()=>{forced=true;render()};
+$("grid").onchange=()=>{$("gridOverlay").hidden=!$("grid").checked};
+$("resetLab").onclick=()=>{
+ $("angle").value="front";$("tilt").value=0;$("light").value="gold";$("exposure").value=0;
+ $("treeView").value="whole";forced=false;render();
+};
+
+$("download").onclick=()=>{
+ try{
+  const copy=document.documentElement.cloneNode(true);
+  copy.querySelectorAll("#demoGrid input").forEach(i=>i.removeAttribute("checked"));
+  copy.querySelectorAll("#scripts details").forEach((d,i)=>{
+   d.classList.remove("current");
+   if(i===0)d.setAttribute("open","");else d.removeAttribute("open");
+  });
+  copy.querySelector("#clock").textContent="00:00";
+  copy.querySelector("#progress").style.width="0%";
+  copy.querySelector("#start").textContent="▶ 開始";
+  copy.querySelector("#currentSection").textContent="準備好，從觀察開始。";
+  copy.querySelector("#downloadStatus").textContent="";
+  const blob=new Blob(["<!DOCTYPE html>\n"+copy.outerHTML],{type:"text/html;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download="index.html";
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),30000);
+  $("downloadStatus").textContent="已嘗試下載 index.html。若沒有收到檔案，可能是預覽環境限制；請直接複製完整程式碼儲存。";
+ }catch(e){
+  $("downloadStatus").textContent="此環境未能下載。請複製完整程式碼，儲存為 index.html。";
+ }
+};
+render();
+updateTimer();
+</script>
+
+</body></html>
