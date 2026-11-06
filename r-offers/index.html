@@ -350,9 +350,15 @@
         const b = merchantKey(right);
         return Boolean(a && b && (a === b || a.includes(b) || b.includes(a)));
       };
-      const matchingRecommendations = () => (data.recommendations || []).filter(item => allTx().some(transaction => sameMerchant(transaction.merchant, item.merchant)));
+      const matchingRecommendations = () => {
+        if (!data.transactions.length && !extras.length) return data.recommendations || [];
+        return (data.recommendations || []).filter(item => allTx().some(transaction => sameMerchant(transaction.merchant, item.merchant)));
+      };
       const allowedCategories = new Set(['Restaurant', 'Travel', 'Shopping', 'Groceries', 'Clothing', 'Utilities']);
       const categoryData = () => {
+        if (!allTx().length && Array.isArray(data.categoryTotals) && data.categoryTotals.length) {
+          return data.categoryTotals.map(item => ({ name: item.name, amount: Number(item.amount) }));
+        }
         const totals = {};
         allTx().forEach(item => { totals[item.category] = (totals[item.category] || 0) + Number(item.amount); });
         return Object.entries(totals).map(([name, amount]) => ({ name, amount })).sort((a, b) => b.amount - a.amount);
@@ -370,7 +376,7 @@
         document.getElementById('donut').style.background = `conic-gradient(${stops.join(',')})`;
         document.getElementById('donutTotal').textContent = fmt(total);
         document.getElementById('totalSpend').innerHTML = `${fmt(total)} <span>training period spend</span>`;
-        document.getElementById('transactionCount').textContent = allTx().length;
+        document.getElementById('transactionCount').textContent = allTx().length || data.scenario.recordCount || '—';
         document.getElementById('categoryCount').textContent = list.length;
         document.getElementById('topCategory').textContent = list[0] ? (labels[list[0].name] || list[0].name) : '—';
         document.getElementById('legend').innerHTML = list.map(item => {
