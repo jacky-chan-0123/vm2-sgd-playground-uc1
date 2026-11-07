@@ -206,6 +206,14 @@
       .status-pill { align-self: flex-end; }
       .ledger-toolbar { width: 100%; flex-wrap: wrap; }
       .ledger-toolbar .secondary { margin-left: auto; }
+      /* The public scenario table has only three aggregate columns: keep it readable without side-scrolling. */
+      .table-wrap { overflow-x: hidden; }
+      .transactions { min-width: 0; table-layout: fixed; }
+      .transactions th, .transactions td { padding: 10px 7px; font-size: 11px; overflow-wrap: anywhere; }
+      .transactions th:first-child, .transactions td:first-child { width: 37%; }
+      .transactions th:nth-child(2), .transactions td:nth-child(2) { width: 34%; }
+      .transactions th:nth-child(3), .transactions td:nth-child(3) { width: 29%; }
+      .transactions .amount { font-size: 11px; }
       .form-grid { grid-template-columns: 1fr; }
       .field.full { grid-column: auto; }
       .footer { margin-left: -15px; margin-right: -15px; padding: 20px 15px; }
