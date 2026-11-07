@@ -221,7 +221,7 @@
         <button class="nav-link" data-scroll="overview">Overview</button>
         <button class="nav-link" data-scroll="offers">Offer record</button>
         <button class="nav-link" data-scroll="recommendations">Scenario review</button>
-        <button class="nav-link" data-scroll="statements">Training ledger</button>
+        <button class="nav-link" data-scroll="statements">Scenario record</button>
       </nav>
       <div class="topbar-meta"><span class="snapshot">Daily snapshot</span><span id="updatedAt">Loading</span></div>
       <button class="mobile-menu" id="openNav" aria-label="Open navigation" aria-controls="mobileNav" aria-expanded="false">Menu</button>
@@ -270,16 +270,16 @@
     </section>
 
     <section class="section" id="statements">
-      <div class="section-heading"><div><div class="eyebrow">Training ledger</div><h2>Statement transactions</h2></div><div class="ledger-toolbar"><label for="statementFilter">Filter</label><select class="select" id="statementFilter"><option value="All">All categories</option></select><button class="secondary" id="clearExtras">Clear local inputs</button></div></div>
-      <div class="table-wrap"><table class="transactions"><thead><tr><th>Date</th><th>Merchant</th><th>Category</th><th>Location</th><th>Training amount</th><th>Scenario card</th></tr></thead><tbody id="transactionRows"></tbody></table></div>
-      <div class="empty" id="emptyTransactions" hidden>No training transactions are in this category.</div>
+      <div class="section-heading"><div><div class="eyebrow">Aggregate scenario record</div><h2>Monthly spending summary</h2></div><p>Aggregate illustrative figures only. Individual transaction, merchant and card records are not published.</p></div>
+      <div class="table-wrap"><table class="transactions"><thead><tr><th>Month</th><th>Scenario spend</th><th>Largest category</th></tr></thead><tbody id="transactionRows"></tbody></table></div>
+      <div class="empty" id="emptyTransactions" hidden>No aggregate scenario records are available.</div>
     </section>
 
     <footer class="footer"><p><strong>R Offers is a local training monitor.</strong> Local charges remain in this browser session only.</p><p>Daily snapshot · Public-source links included · No live customer or payment data requested.</p></footer>
   </main>
 
   <div class="scrim" id="navScrim" hidden></div>
-  <aside class="side-nav" id="mobileNav" data-open="false" aria-label="Mobile navigation"><div class="side-nav-head"><span>R Offers</span><button class="close-nav" id="closeNav" aria-label="Close navigation">×</button></div><button data-scroll="overview">Overview</button><button data-scroll="offers">Offer record</button><button data-scroll="recommendations">Scenario review</button><button data-scroll="statements">Training ledger</button><p class="nav-status"><span class="snapshot">Daily snapshot</span><br><span id="mobileUpdatedAt">Loading</span></p></aside>
+  <aside class="side-nav" id="mobileNav" data-open="false" aria-label="Mobile navigation"><div class="side-nav-head"><span>R Offers</span><button class="close-nav" id="closeNav" aria-label="Close navigation">×</button></div><button data-scroll="overview">Overview</button><button data-scroll="offers">Offer record</button><button data-scroll="recommendations">Scenario review</button><button data-scroll="statements">Scenario record</button><p class="nav-status"><span class="snapshot">Daily snapshot</span><br><span id="mobileUpdatedAt">Loading</span></p></aside>
 
   <div class="modal" id="chargeModal" hidden role="dialog" aria-modal="true" aria-labelledby="chargeTitle">
     <form class="dialog" id="chargeForm">
@@ -356,11 +356,9 @@
       };
       const allowedCategories = new Set(['Restaurant', 'Travel', 'Shopping', 'Groceries', 'Clothing', 'Utilities']);
       const categoryData = () => {
-        if (!allTx().length && Array.isArray(data.categoryTotals) && data.categoryTotals.length) {
-          return data.categoryTotals.map(item => ({ name: item.name, amount: Number(item.amount) }));
-        }
         const totals = {};
-        allTx().forEach(item => { totals[item.category] = (totals[item.category] || 0) + Number(item.amount); });
+        (data.categoryTotals || []).forEach(item => { totals[item.name] = (totals[item.name] || 0) + Number(item.amount); });
+        extras.forEach(item => { totals[item.category] = (totals[item.category] || 0) + Number(item.amount); });
         return Object.entries(totals).map(([name, amount]) => ({ name, amount })).sort((a, b) => b.amount - a.amount);
       };
       function drawChart() {
@@ -376,7 +374,7 @@
         document.getElementById('donut').style.background = `conic-gradient(${stops.join(',')})`;
         document.getElementById('donutTotal').textContent = fmt(total);
         document.getElementById('totalSpend').innerHTML = `${fmt(total)} <span>training period spend</span>`;
-        document.getElementById('transactionCount').textContent = allTx().length || data.scenario.recordCount || '—';
+        document.getElementById('transactionCount').textContent = (data.scenario.recordCount || 0) + extras.length || '—';
         document.getElementById('categoryCount').textContent = list.length;
         document.getElementById('topCategory').textContent = list[0] ? (labels[list[0].name] || list[0].name) : '—';
         document.getElementById('legend').innerHTML = list.map(item => {
@@ -405,9 +403,9 @@
         document.getElementById('noMatchList').innerHTML = (noMatch.length ? noMatch : ['No unverified matches are shown.']).map(item => `<li>${escapeHTML(neutralCopy(item))}</li>`).join('');
       }
       function renderTransactions() {
-        const transactions = allTx().filter(item => selected === 'All' || item.category === selected);
-        document.getElementById('transactionRows').innerHTML = transactions.map(item => `<tr><td>${escapeHTML(item.date)}</td><td>${escapeHTML(neutralCopy(item.merchant))}${item.local ? '<br><span class="card-label">Local training preview</span>' : ''}</td><td>${escapeHTML(labels[item.category] || item.category)}</td><td>${escapeHTML(item.location)}</td><td class="amount">${fmt(Number(item.amount))}</td><td><span class="card-label">${escapeHTML(neutralCopy(item.card || 'Local preview'))}</span></td></tr>`).join('');
-        document.getElementById('emptyTransactions').hidden = transactions.length > 0;
+        const records = data.scenario.monthlyRecords || [];
+        document.getElementById('transactionRows').innerHTML = records.map(item => `<tr><td>${escapeHTML(item.month)}</td><td class="amount">${fmt(Number(item.total))}</td><td>${escapeHTML(labels[item.topCategory] || item.topCategory)}</td></tr>`).join('');
+        document.getElementById('emptyTransactions').hidden = records.length > 0;
       }
       function renderFilters() {
         const categories = ['All', ...Object.keys(colors)];
@@ -415,8 +413,7 @@
         document.querySelectorAll('[data-category]').forEach(button => {
           button.onclick = () => {
             selected = button.dataset.category;
-            document.getElementById('statementFilter').value = selected;
-            renderFilters(); renderOffers(); renderTransactions();
+            renderFilters(); renderOffers();
           };
         });
       }
@@ -426,9 +423,7 @@
       document.getElementById('scenarioPeriod').textContent = `${data.scenario.period} · training scenario`;
       document.getElementById('updatedAt').textContent = formattedDate;
       document.getElementById('mobileUpdatedAt').textContent = `Updated ${formattedDate}`;
-      const select = document.getElementById('statementFilter');
-      Object.keys(colors).forEach(category => select.insertAdjacentHTML('beforeend', `<option value="${category}">${labels[category]}</option>`));
-      select.onchange = () => { selected = select.value; renderFilters(); renderOffers(); renderTransactions(); };
+
 
       const sideNav = document.getElementById('mobileNav');
       const scrim = document.getElementById('navScrim');
@@ -534,7 +529,8 @@
           showToast(`${imported.length} mock record${imported.length === 1 ? '' : 's'} analysed in this browser session.`);
         } catch (error) { showToast(error.message || 'The mock statement could not be read.'); }
       };
-      document.getElementById('clearExtras').onclick = () => {
+      const clearExtras = document.getElementById('clearExtras');
+      if (clearExtras) clearExtras.onclick = () => {
         extras = [];
         sessionStorage.removeItem('r-offers-training-extras');
         renderAll();
