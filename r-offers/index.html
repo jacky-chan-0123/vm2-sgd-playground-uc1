@@ -245,7 +245,7 @@
             <h1>Daily offer monitor</h1>
             <p class="summary-copy">Illustrative spend with source-linked public offers. Confirm terms before payment.</p>
           </div>
-          <div class="summary-actions"><button class="secondary" id="openTableFinder">Find a table</button><button class="primary" id="openCharge">Add charge</button><button class="primary" id="openStatement">Upload new statement record</button></div>
+          <div class="summary-actions"><button class="primary" id="openCharge">Add charge</button><button class="primary" id="openStatement">Upload new statement record</button></div>
         </div>
         <div class="summary-amount" id="totalSpend">— <span>training period spend</span></div>
         <div class="summary-stats" aria-label="Training spending summary">
@@ -314,15 +314,6 @@
       <p class="meta">Required fields: date, merchant, category, location and amount. Optional: card. Categories: Restaurant, Travel, Shopping, Groceries, Clothing or Utilities.</p>
       <label class="check"><input type="checkbox" name="confirm" required><span>I confirm this is an approved illustrative CSV or JSON file with no real or personal data.</span></label>
       <div class="dialog-footer"><button type="button" class="secondary" id="closeStatement">Cancel</button><button class="primary" type="submit">Analyse locally</button></div>
-    </form>
-  </div>
-  <div class="modal" id="tableFinderModal" hidden role="dialog" aria-modal="true" aria-labelledby="tableFinderTitle">
-    <form class="dialog" id="tableFinderForm" action="https://www.google.com/maps/search/" method="get" target="_blank">
-      <input type="hidden" name="api" value="1">
-      <div class="eyebrow">Restaurant utility</div><h2 id="tableFinderTitle">Find a table</h2>
-      <p class="meta">Search Google Maps for a restaurant and location. This opens a public third-party site in a new tab.</p>
-      <label class="field full"><span>Restaurant or cuisine and location</span><input id="tableFinderQuery" name="query" maxlength="120" required placeholder="Example: Japanese restaurant, Causeway Bay"></label>
-      <div class="dialog-footer"><button type="button" class="secondary" id="closeTableFinder">Cancel</button><button class="primary" type="submit">Search tables</button></div>
     </form>
   </div>
   <div class="toast" id="toast" hidden role="status"></div>
@@ -468,9 +459,6 @@
       const statementModal = document.getElementById('statementModal');
       const statementForm = document.getElementById('statementForm');
       const statementFile = document.getElementById('statementFile');
-      const tableFinderModal = document.getElementById('tableFinderModal');
-      const tableFinderForm = document.getElementById('tableFinderForm');
-      const tableFinderQuery = document.getElementById('tableFinderQuery');
       const toast = document.getElementById('toast');
       const showToast = message => {
         toast.textContent = message;
@@ -480,18 +468,14 @@
       const closeModal = target => { target.hidden = true; if (lastFocus) lastFocus.focus(); };
       document.getElementById('openCharge').onclick = () => { lastFocus = document.activeElement; modal.hidden = false; form.elements.merchant.focus(); };
       document.getElementById('openStatement').onclick = () => { lastFocus = document.activeElement; statementModal.hidden = false; statementFile.focus(); };
-      document.getElementById('openTableFinder').onclick = () => { lastFocus = document.activeElement; tableFinderModal.hidden = false; tableFinderQuery.focus(); };
       document.getElementById('closeCharge').onclick = () => closeModal(modal);
       document.getElementById('closeStatement').onclick = () => closeModal(statementModal);
-      document.getElementById('closeTableFinder').onclick = () => closeModal(tableFinderModal);
       modal.onclick = event => { if (event.target === modal) closeModal(modal); };
       statementModal.onclick = event => { if (event.target === statementModal) closeModal(statementModal); };
-      tableFinderModal.onclick = event => { if (event.target === tableFinderModal) closeModal(tableFinderModal); };
       document.addEventListener('keydown', event => {
         if (event.key === 'Escape') {
           if (!modal.hidden) closeModal(modal);
           if (!statementModal.hidden) closeModal(statementModal);
-          if (!tableFinderModal.hidden) closeModal(tableFinderModal);
           if (sideNav.dataset.open === 'true') setNav(false);
         }
       });
@@ -552,11 +536,6 @@
           renderAll();
           showToast(`${imported.length} mock record${imported.length === 1 ? '' : 's'} analysed in this browser session.`);
         } catch (error) { showToast(error.message || 'The mock statement could not be read.'); }
-      };
-      tableFinderForm.onsubmit = () => {
-        tableFinderModal.hidden = true;
-        tableFinderForm.reset();
-        if (lastFocus) lastFocus.focus();
       };
       const clearExtras = document.getElementById('clearExtras');
       if (clearExtras) clearExtras.onclick = () => {
