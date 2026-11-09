@@ -94,7 +94,7 @@
     .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--charcoal); }
     .section-heading p { max-width: 400px; margin: 0; color: var(--muted); font-size: 12px; text-align: right; }
     .section-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); }
-    .filters { display: flex; gap: 7px; overflow-x: auto; padding: 1px 0; scrollbar-width: none; }
+    .filters { display: flex; min-width: 0; max-width: 100%; gap: 7px; overflow-x: auto; padding: 1px 0; scrollbar-width: none; }
     .filters::-webkit-scrollbar { display: none; }
     .chip { min-height: 34px; flex: 0 0 auto; padding: 6px 11px; border: 1px solid var(--line-dark); border-radius: 18px; background: var(--white); color: var(--charcoal); font-size: 12px; font-weight: 700; }
     .chip:hover { border-color: var(--red); color: var(--red-dark); }
@@ -396,14 +396,22 @@
       }
       function renderOffers() {
         const category = selected === 'All' ? null : selected;
-        const offerGroups = data.offers.filter(item => !category || item.category === category || (category === 'Restaurant' && item.category === 'Dining'));
-        const offers = offerGroups.flatMap(offer => String(offer.merchant || '').split(/,\s*|\s+and\s+/).filter(Boolean).map(merchant => ({ ...offer, merchant })));
-        document.getElementById('offerCount').textContent = `${offers.length} verified offer${offers.length === 1 ? '' : 's'} in this snapshot`;
-        document.getElementById('offerGrid').innerHTML = offers.length ? offers.map((offer, index) => {
+        const offers = data.offers.flatMap(offer => String(offer.merchant || '').replace(/\s+—\s+use\s+.*$/i, '').split(/;\s*/).map(merchant => merchant.replace(/^and\s+/i, '').trim()).filter(Boolean).map(merchant => ({ ...offer, merchant })));
+        const diningSearchNames = {
+          'Sushiro Hong Kong': 'Sushiro Hong Kong',
+          'TamJai SamGor Mixian': 'TamJai SamGor Mixian Hong Kong',
+          'TamJai Yunnan Mixian': 'TamJai Yunnan Mixian Hong Kong',
+          'McDonald’s restaurants and McDonald’s App in Hong Kong': 'McDonald’s Hong Kong restaurants',
+          'The Peninsula Hong Kong (Gaddi’s, Felix, The Bar and The Lobby)': 'The Peninsula Hong Kong restaurants'
+        };
+        const visibleOffers = offers.filter(item => !category || item.category === category || (category === 'Restaurant' && (item.category === 'Dining' || Boolean(diningSearchNames[item.merchant]))));
+        document.getElementById('offerCount').textContent = `${visibleOffers.length} verified offer${visibleOffers.length === 1 ? '' : 's'} in this snapshot`;
+        document.getElementById('offerGrid').innerHTML = visibleOffers.length ? visibleOffers.map((offer, index) => {
           const merchant = neutralCopy(offer.merchant);
           const tile = (merchant.match(/[A-Za-z0-9]+/g) || ['R']).map(part => part[0]).join('').slice(0, 2).toUpperCase();
-          const reservation = (offer.category === 'Restaurant' || offer.category === 'Dining') ? `<a class="reservation-link" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(`${merchant} Hong Kong reservation`)}" target="_blank" rel="noopener noreferrer" aria-label="Find a table for ${escapeHTML(merchant)} in Google Maps, opens in a new tab">Find a table</a>` : '';
-          return `<article class="offer-card" aria-label="${escapeHTML(merchant)} verified public offer"><span class="tag">Verified public offer</span><div class="merchant-row"><div class="eyebrow">${escapeHTML(labels[offer.category] || offer.category)}</div><span class="merchant-tile" title="${escapeHTML(merchant)}" aria-label="Merchant: ${escapeHTML(merchant)}">${tile}</span></div><h3 class="sr-only">${escapeHTML(merchant)}</h3><p>${escapeHTML(neutralCopy(offer.offer || 'Offer details retained in the public-source record.'))}</p><p class="meta">${escapeHTML(neutralCopy(offer.when || 'Check live availability before payment.'))}</p><p class="meta">${escapeHTML(neutralCopy(offer.conditions || 'Eligibility and exclusions apply.'))}</p><div class="offer-actions">${reservation}<div class="source">${sourceLink(offer.source)}</div></div></article>`;
+          const searchName = diningSearchNames[offer.merchant];
+          const reservation = searchName ? `<a class="reservation-link" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(searchName)}" target="_blank" rel="noopener noreferrer" aria-label="Find a table for ${escapeHTML(merchant)} using Google Maps search, opens in a new tab">Find a table (Google Maps search) ↗</a>` : '';
+          return `<article class="offer-card" aria-label="${escapeHTML(merchant)} verified public offer"><span class="tag">Verified public offer</span><div class="merchant-row"><div><h3>${escapeHTML(merchant)}</h3><div class="eyebrow">${escapeHTML(labels[offer.category] || offer.category)}</div></div><span class="merchant-tile" title="${escapeHTML(merchant)}" aria-label="Merchant: ${escapeHTML(merchant)}">${tile}</span></div><p>${escapeHTML(neutralCopy(offer.offer || 'Offer details retained in the public-source record.'))}</p><p class="meta">${escapeHTML(neutralCopy(offer.when || 'Check live availability before payment.'))}</p><p class="meta">${escapeHTML(neutralCopy(offer.conditions || 'Eligibility and exclusions apply.'))}</p><div class="offer-actions"><div class="source">${sourceLink(offer.source)}</div>${reservation}</div></article>`;
         }).join('') : '<div class="empty">No verified merchant match for this category in this training snapshot.</div>';
       }
       function renderRecommendations() {
