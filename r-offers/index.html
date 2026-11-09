@@ -272,10 +272,7 @@
 
     <section class="section" id="recommendations">
       <div class="section-heading"><div><div class="eyebrow">Offer guidance</div><h2>Suggested for you</h2></div><p>Named matches only.</p></div>
-      <div class="lower-grid">
-        <article class="recommendations" id="recommendationList"></article>
-        <aside class="no-match"><div class="eyebrow">Uncertainty state</div><h2>No confirmed match</h2><p>These named merchants or categories have no verified match in this snapshot.</p><ul id="noMatchList"></ul></aside>
-      </div>
+      <article class="recommendations" id="recommendationList"></article>
     </section>
 
     <section class="section" id="statements">
@@ -416,10 +413,8 @@
       }
       function renderRecommendations() {
         const items = matchingRecommendations();
-        document.getElementById('recommendationList').innerHTML = items.length ? items.map(item => `<div class="recommendation"><h3>${escapeHTML(neutralCopy(item.merchant))}</h3><p>${escapeHTML(conciseWhy(item.why))}</p><p><b>Do:</b> ${escapeHTML(neutralCopy(item.action || 'Check the source before payment.'))}</p>${sourceLink(item.source)}</div>`).join('') : '<div class="empty">No verified named offer match in the current local statement view.</div>';
-        const localNoMatch = extras.filter(transaction => !items.some(item => sameMerchant(transaction.merchant, item.merchant))).map(transaction => transaction.merchant);
-        const noMatch = [...new Set([...(data.noMatch || []), ...localNoMatch])];
-        document.getElementById('noMatchList').innerHTML = (noMatch.length ? noMatch : ['No unverified matches are shown.']).map(item => `<li>${escapeHTML(neutralCopy(item))}</li>`).join('');
+        document.getElementById('recommendationList').innerHTML = items.length ? items.map(item => `<div class="recommendation"><h3>${escapeHTML(neutralCopy(item.merchant))}</h3>${item.hideWhy ? '' : `<p>${escapeHTML(conciseWhy(item.why))}</p>`}<p><b>Do:</b> ${escapeHTML(neutralCopy(item.action || 'Check the source before payment.'))}</p>${sourceLink(item.source)}</div>`).join('') : '<div class="empty">No verified named offer match in the current local statement view.</div>';
+
       }
       function renderTransactions() {
         const filter = document.getElementById('statementFilter');
