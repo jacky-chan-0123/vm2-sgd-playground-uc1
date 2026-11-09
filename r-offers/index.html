@@ -133,6 +133,7 @@
     .no-match li { margin: 8px 0; }
 
     .ledger-toolbar { display: flex; align-items: center; gap: 8px; }
+    .ledger-filter { display: flex; align-items: center; gap: 8px; }
     .ledger-toolbar label { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
     .select { height: 37px; min-width: 160px; padding: 0 8px; border: 1px solid var(--charcoal); border-radius: var(--radius); background: var(--white); color: var(--ink); font-size: 12px; }
     .table-wrap { overflow: auto; border-bottom: 1px solid var(--line); }
@@ -205,7 +206,9 @@
       .section-toolbar { align-items: flex-start; flex-direction: column; }
       .status-pill { align-self: flex-end; }
       .ledger-toolbar { width: 100%; flex-wrap: wrap; }
-      .ledger-toolbar .secondary { margin-left: auto; }
+      .ledger-filter { flex: 1 1 200px; justify-content: space-between; }
+      .ledger-filter .select { min-width: 0; max-width: 60%; }
+      .ledger-toolbar .secondary { margin-left: 0; }
       /* Four ledger columns fit narrow screens without page-level overflow. */
       .table-wrap { overflow-x: hidden; }
       .transactions { min-width: 0; table-layout: fixed; }
@@ -276,10 +279,10 @@
     </section>
 
     <section class="section" id="statements">
-      <div class="section-heading"><div><div class="eyebrow">Simulated fictional statement</div><h2>Transaction record</h2></div><div class="ledger-toolbar"><label for="statementFilter">Spending category</label><select class="select" id="statementFilter"><option value="All">All categories</option></select><button class="secondary" id="clearExtras" type="button">Clear local inputs</button></div></div>
+      <div class="section-heading"><div><div class="eyebrow">Simulated fictional statement</div><h2>Transaction record</h2></div><div class="ledger-toolbar"><div class="ledger-filter"><label for="statementFilter">Spending category</label><select class="select" id="statementFilter"><option value="All">All categories</option></select></div><div class="ledger-filter"><label for="monthFilter">Month</label><select class="select" id="monthFilter"><option value="All">All months</option></select></div><button class="secondary" id="clearExtras" type="button">Clear local inputs</button></div></div>
       <p class="meta">Fictional simulated training transactions only; no real personal, customer, payment or internal data.</p>
       <div class="table-wrap"><table class="transactions"><thead><tr><th>Date</th><th>Merchant</th><th>Category</th><th>Amount</th></tr></thead><tbody id="transactionRows"></tbody></table></div>
-      <div class="empty" id="emptyTransactions" hidden>No simulated transactions are in this category.</div>
+      <div class="empty" id="emptyTransactions" hidden>No simulated transactions match the selected category and month.</div>
     </section>
 
     <footer class="footer"><p><strong>R Offers is a local training monitor.</strong> Local charges remain in this browser session only.</p><p>Daily snapshot · Public-source links included · No live customer or payment data requested.</p></footer>
@@ -422,11 +425,20 @@
         const categories = [...new Set(allTx().map(item => item.category))].sort();
         filter.innerHTML = '<option value="All">All categories</option>' + categories.map(category => `<option value="${escapeHTML(category)}">${escapeHTML(labels[category] || category)}</option>`).join('');
         filter.value = selection === 'All' || categories.includes(selection) ? selection : 'All';
-        const records = allTx().filter(item => filter.value === 'All' || item.category === filter.value);
+        const monthFilter = document.getElementById('monthFilter');
+        const monthSelection = monthFilter.value || 'All';
+        const months = [...new Set(allTx().map(item => String(item.date || '').slice(0, 7)).filter(month => /^\d{4}-(0[1-9]|1[0-2])$/.test(month)))].sort().reverse();
+        monthFilter.innerHTML = '<option value="All">All months</option>' + months.map(month => `<option value="${month}">${month}</option>`).join('');
+        monthFilter.value = monthSelection === 'All' || months.includes(monthSelection) ? monthSelection : 'All';
+        const records = allTx().map((item, index) => ({ item, index }))
+          .filter(({ item }) => (filter.value === 'All' || item.category === filter.value) && (monthFilter.value === 'All' || String(item.date).slice(0, 7) === monthFilter.value))
+          .sort((a, b) => String(b.item.date).localeCompare(String(a.item.date)) || a.index - b.index)
+          .map(({ item }) => item);
         document.getElementById('transactionRows').innerHTML = records.map(item => `<tr><td>${escapeHTML(item.date)}</td><td>${escapeHTML(item.merchant)}</td><td>${escapeHTML(labels[item.category] || item.category)}</td><td class="amount">${fmtTransaction(Number(item.amount))}</td></tr>`).join('');
         document.getElementById('emptyTransactions').hidden = records.length > 0;
       }
       document.getElementById('statementFilter').onchange = renderTransactions;
+      document.getElementById('monthFilter').onchange = renderTransactions;
       function renderFilters() {
         const categories = ['All', ...Object.keys(colors)];
         document.getElementById('filters').innerHTML = categories.map(category => `<button class="chip" aria-pressed="${category === selected}" data-category="${category}">${category === 'All' ? 'All offers' : escapeHTML(labels[category])}</button>`).join('');
