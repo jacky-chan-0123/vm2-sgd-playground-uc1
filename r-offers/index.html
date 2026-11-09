@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>R Offers — training spending & public offers</title>
-  <meta name="description" content="A local-only training monitor for illustrative spending and public offer reminders.">
+  <meta name="description" content="A simulated training monitor for fictional spending and public offer reminders.">
   <style>
     :root {
       --paper: #fbfbfb;
@@ -206,13 +206,14 @@
       .status-pill { align-self: flex-end; }
       .ledger-toolbar { width: 100%; flex-wrap: wrap; }
       .ledger-toolbar .secondary { margin-left: auto; }
-      /* The public scenario table has only three aggregate columns: keep it readable without side-scrolling. */
+      /* Four ledger columns fit narrow screens without page-level overflow. */
       .table-wrap { overflow-x: hidden; }
       .transactions { min-width: 0; table-layout: fixed; }
       .transactions th, .transactions td { padding: 10px 7px; font-size: 11px; overflow-wrap: anywhere; }
-      .transactions th:first-child, .transactions td:first-child { width: 37%; }
-      .transactions th:nth-child(2), .transactions td:nth-child(2) { width: 34%; }
-      .transactions th:nth-child(3), .transactions td:nth-child(3) { width: 29%; }
+      .transactions th:first-child, .transactions td:first-child { width: 25%; }
+      .transactions th:nth-child(2), .transactions td:nth-child(2) { width: 29%; }
+      .transactions th:nth-child(3), .transactions td:nth-child(3) { width: 23%; }
+      .transactions th:nth-child(4), .transactions td:nth-child(4) { width: 23%; }
       .transactions .amount { font-size: 11px; }
       .form-grid { grid-template-columns: 1fr; }
       .field.full { grid-column: auto; }
@@ -235,7 +236,7 @@
       <button class="mobile-menu" id="openNav" aria-label="Open navigation" aria-controls="mobileNav" aria-expanded="false">Menu</button>
     </header>
 
-    <div class="training-banner" role="note"><p><strong>Illustrative training data — do not enter real personal, account, card or payment information.</strong></p></div>
+    <div class="training-banner" role="note"><p><strong>SIMULATED TRAINING DATA — fictional transactions and public information only.</strong> Do not enter real personal, customer, account, card, payment or internal data.</p></div>
 
     <section class="overview" id="overview" aria-label="Training scenario overview">
       <article class="summary">
@@ -278,9 +279,10 @@
     </section>
 
     <section class="section" id="statements">
-      <div class="section-heading"><div><div class="eyebrow">Aggregate scenario record</div><h2>Monthly spending summary</h2></div><p>Aggregate illustrative figures only. Individual transaction, merchant and card records are not published.</p></div>
-      <div class="table-wrap"><table class="transactions"><thead><tr><th>Month</th><th>Scenario spend</th><th>Largest category</th></tr></thead><tbody id="transactionRows"></tbody></table></div>
-      <div class="empty" id="emptyTransactions" hidden>No aggregate scenario records are available.</div>
+      <div class="section-heading"><div><div class="eyebrow">Simulated fictional statement</div><h2>Transaction record</h2></div><div class="ledger-toolbar"><label for="statementFilter">Spending category</label><select class="select" id="statementFilter"><option value="All">All categories</option></select><button class="secondary" id="clearExtras" type="button">Clear local inputs</button></div></div>
+      <p class="meta">Fictional simulated training transactions only; no real personal, customer, payment or internal data.</p>
+      <div class="table-wrap"><table class="transactions"><thead><tr><th>Date</th><th>Merchant</th><th>Category</th><th>Amount</th></tr></thead><tbody id="transactionRows"></tbody></table></div>
+      <div class="empty" id="emptyTransactions" hidden>No simulated transactions are in this category.</div>
     </section>
 
     <footer class="footer"><p><strong>R Offers is a local training monitor.</strong> Local charges remain in this browser session only.</p><p>Daily snapshot · Public-source links included · No live customer or payment data requested.</p></footer>
@@ -343,6 +345,7 @@
         return url ? `<a href="${escapeHTML(url[0])}" target="_blank" rel="noreferrer" aria-label="View public source in a new tab">View public source ↗</a>` : '<span class="meta">Source retained in daily audit</span>';
       };
       const fmt = n => new Intl.NumberFormat('en-HK', { style: 'currency', currency: 'HKD', maximumFractionDigits: 0 }).format(n);
+      const fmtTransaction = n => new Intl.NumberFormat('en-HK', { style: 'currency', currency: 'HKD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
       let selected = 'All';
       let extras = [];
       let lastFocus = null;
@@ -411,10 +414,16 @@
         document.getElementById('noMatchList').innerHTML = (noMatch.length ? noMatch : ['No unverified matches are shown.']).map(item => `<li>${escapeHTML(neutralCopy(item))}</li>`).join('');
       }
       function renderTransactions() {
-        const records = data.scenario.monthlyRecords || [];
-        document.getElementById('transactionRows').innerHTML = records.map(item => `<tr><td>${escapeHTML(item.month)}</td><td class="amount">${fmt(Number(item.total))}</td><td>${escapeHTML(labels[item.topCategory] || item.topCategory)}</td></tr>`).join('');
+        const filter = document.getElementById('statementFilter');
+        const selection = filter.value || 'All';
+        const categories = [...new Set(allTx().map(item => item.category))].sort();
+        filter.innerHTML = '<option value="All">All categories</option>' + categories.map(category => `<option value="${escapeHTML(category)}">${escapeHTML(labels[category] || category)}</option>`).join('');
+        filter.value = selection === 'All' || categories.includes(selection) ? selection : 'All';
+        const records = allTx().filter(item => filter.value === 'All' || item.category === filter.value);
+        document.getElementById('transactionRows').innerHTML = records.map(item => `<tr><td>${escapeHTML(item.date)}</td><td>${escapeHTML(item.merchant)}</td><td>${escapeHTML(labels[item.category] || item.category)}</td><td class="amount">${fmtTransaction(Number(item.amount))}</td></tr>`).join('');
         document.getElementById('emptyTransactions').hidden = records.length > 0;
       }
+      document.getElementById('statementFilter').onchange = renderTransactions;
       function renderFilters() {
         const categories = ['All', ...Object.keys(colors)];
         document.getElementById('filters').innerHTML = categories.map(category => `<button class="chip" aria-pressed="${category === selected}" data-category="${category}">${category === 'All' ? 'All offers' : escapeHTML(labels[category])}</button>`).join('');
